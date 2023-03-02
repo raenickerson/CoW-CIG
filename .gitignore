@@ -7,3 +7,5 @@
 *.png
 *Rproj
 Outputs/
+Data/
+Code/
