@@ -1,13 +1,12 @@
+fig:diagram
 fig:nice-fig
 tab:nice-tab
 eq:binom
 thm:tri
 about
-usage
-render-book
-preview-book
-hello-bookdown
-a-section
+creating-my-database
+creating-the-cameras-table
+creating-the-photos-table
 cross
 chapters-and-sub-chapters
 captioned-figures-and-tables

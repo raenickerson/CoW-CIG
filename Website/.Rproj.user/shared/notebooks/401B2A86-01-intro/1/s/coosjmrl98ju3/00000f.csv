@@ -1,0 +1,6 @@
+"0","cow_cig_database <- dbConnect(RSQLite::SQLite(), 
+                    ""CoW_CIG.db"")
+"
+"2","Error in dbConnect(RSQLite::SQLite(), ""CoW_CIG.db"") : 
+  could not find function ""dbConnect""
+"

@@ -1,0 +1,7 @@
+h1:creating-my-database Creating My Database
+fig:diagram Diagram Illustrating the Structure of the Database
+h2:starting-the-databse Starting the Databse
+h3:creating-the-database-connection-to-my-sqlite-database Creating the database connection to my SQLite database
+h2:creating-the-cameras-table Creating the cameras table
+h2:creating-the-photos-table Creating the photos table
+

@@ -1,0 +1,73 @@
+---
+title: "testing R 2"
+author: "Rae Nickerson"
+date: "2023-03-01"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc-title: "Table of Contents"
+    
+---
+
+#Building the Dragons Database
+
+## Database Structure
+
+In today's class, we are going to create a dynamic document that shows how to recreate the dragons database that we have been using in class. 
+
+```{r diagram, eval = TRUE, echo = FALSE, out.width = '100%', fig.align = 'center', fig.cap = "Diagram Illustrating the Structure of the Database"}
+knitr::include_graphics("database_diagram.png")
+```
+
+## Creating the Database
+
+This is the code we used to create the database. We'll start by loading the `DBI` and `RSQLite` packages:
+```{r pkg, eval = TRUE, echo = TRUE, warning = FALSE, message = FALSE, error = FALSE}
+library(DBI)
+library(RSQLite)
+library(ggplot2)
+library(dplyr)
+```
+
+First, we need to establish a connection to SQLite databse. 
+```{r connection, eval = TRUE, echo = TRUE}
+dragons_db <- dbConnect(RSQLite::SQLite(),
+                        "dragons.db")
+```
+
+## Creating the Dragons Table
+
+This table includes all information about individuals that are part of our dataset. The table includes columns for dragon_id, sex, ageclass, and species. The `dragon_id` column contains a unique identifier, and as such, is the primary key of our table. 
+
+```{r dragons-table, eval = FALSE, echo = TRUE}
+dbExecute(dragons_db, "CREATE TABLE dragons (
+          dragon_id varchar(5)
+          sex char(1)
+          age_class varchar(50)
+          PRIMARY KEY (dragon_id));")
+```
+
+This is what the content of the table looks like:
+
+```{r show-dragons, eval = TRUE, echo = FALSE}
+dbGetQuery(dragons_db, "SELECT * FROM dragons LIMIT 10;")
+```
+
+If want in-text code, have two options - either as you write it with `2+2`, or for R to do it's thing, `r 2+2` which will show up as 4
+
+#### Visualize the content of the dragons table
+
+```{r plot-dragons, eval = TRUE, echo = FALSE, out.width = `100%`}
+dragons_table <- dbGetQuery(dragons_db, "SELECT * FROM dragons LIMIT 10;")
+
+dragons_table %>%
+  group_by(dragon_id, species) %>%
+  tally() %>%
+  ggplot(aes(x = species, fill = species)) +
+  geom_bar()
+```
+
+Will need to fuss around with this until you get the graph to look good
+
+
