@@ -1,2 +1,0 @@
-"0","cow_cig_db <- dbConnect(RSQLite::SQLite(), "
-"0","                    ""CoW_CIG.db"")"
