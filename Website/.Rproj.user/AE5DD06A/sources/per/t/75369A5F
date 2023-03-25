@@ -1,14 +1,14 @@
 {
-    "id": "C1463796",
-    "path": "~/Desktop/CIG/Analysis/Website/_output.yml",
-    "project_path": "_output.yml",
-    "type": "yaml",
-    "hash": "0",
+    "id": "75369A5F",
+    "path": "~/Desktop/CIG/Analysis/Website/07-references.Rmd",
+    "project_path": "07-references.Rmd",
+    "type": "r_markdown",
+    "hash": "1110410717",
     "contents": "",
     "dirty": false,
-    "created": 1678741267906.0,
+    "created": 1678741685435.0,
     "source_on_save": false,
-    "relative_order": 4,
+    "relative_order": 5,
     "properties": {
         "source_window_id": "",
         "Source": "Source"

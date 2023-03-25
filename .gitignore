@@ -8,3 +8,5 @@
 Outputs/
 Data/
 Code/
+*.pdf
+!database_design.pdf
