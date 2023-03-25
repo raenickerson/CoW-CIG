@@ -5,11 +5,10 @@ predator data include 1. my game cameras, 2. data from range rider data sheets,
 3. data from range rider/ranch game cameras, and 4. data from wildlife agencies 
 (sightings, collar data, and conflict data).
 
+
 ```{r diagram, eval = TRUE, echo = FALSE, out.width = '100%', fig.align = 'center', fig.cap = "Diagram Illustrating the Structure of the Database"}
 knitr::include_graphics("C:/Users/raeln/Desktop/CIG/Analysis/docs/database_design.pdf", error = FALSE)
 ```
-
-(Simona, can you not use pdf's in RMD files? That might be why my figure isn't showing, but I'll be sure to ask you about it when I get back from the field)
 
 Unfortunately, I will only have my own camera data to analyze at this time, so will
 be focusing on the tables Cameras and Photos. Colored lines represent variables shared
@@ -77,9 +76,6 @@ Preview of the cameras table:
 ```{r show-cameras, eval = TRUE, echo = FALSE}
 dbGetQuery(cow_cig_db, "SELECT * FROM cameras LIMIT 20;")
 ```
-
-(Also, I'm not sure why this didn't show up as an actual table, but I will work on
-that too when I get back. Could it be that there is no data in there yet?)
 
 ## Creating the photos table
 

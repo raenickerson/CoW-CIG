@@ -1,1 +1,0 @@
-{"frames":[],"message":"Error in dbConnect(RSQLite::SQLite(), \"CoW_CIG.db\") : \n  could not find function \"dbConnect\"\n"}
