@@ -5,11 +5,12 @@ predator data include 1. my game cameras, 2. data from range rider data sheets,
 3. data from range rider/ranch game cameras, and 4. data from wildlife agencies 
 (sightings, collar data, and conflict data).
 
+  
+```{r diagram, eval = TRUE, echo = FALSE, out.width = '100%', fig.align = 'center', fig.cap = 'Diagram Illustrating the Structure of the Database'}
+knitr::include_graphics("../database_design.png")
 
-```{r diagram, eval = TRUE, echo = FALSE, out.width = '100%', fig.align = 'center', fig.cap = "Diagram Illustrating the Structure of the Database"}
-knitr::include_graphics("C:/Users/raeln/Desktop/CIG/Analysis/docs/database_design.pdf", error = FALSE)
 ```
-
+  
 Unfortunately, I will only have my own camera data to analyze at this time, so will
 be focusing on the tables Cameras and Photos. Colored lines represent variables shared
 across tables.
