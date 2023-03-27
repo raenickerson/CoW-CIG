@@ -7,7 +7,7 @@ predator data include 1. my game cameras, 2. data from range rider data sheets,
 
   
 ```{r diagram, eval = TRUE, echo = FALSE, out.width = '100%', fig.align = 'center', fig.cap = 'Diagram Illustrating the Structure of the Database'}
-knitr::include_graphics("../database_design.png")
+knitr::include_graphics("../docs/database_design.png")
 
 ```
   
