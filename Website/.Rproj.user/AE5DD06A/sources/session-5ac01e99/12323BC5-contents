@@ -24,7 +24,7 @@ library(ggplot2)
 library(dplyr)
 ```
 
-### Creating the database connection to my SQLite database {-}
+## Creating the database connection to my SQLite database {-}
 
 ```{r connection, eval = TRUE, echo = TRUE}
 cow_cig_db <- dbConnect(RSQLite::SQLite(), 

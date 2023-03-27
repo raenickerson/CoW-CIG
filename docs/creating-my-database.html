@@ -164,10 +164,8 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a></li>
 <li class="chapter" data-level="2" data-path="creating-my-database.html"><a href="creating-my-database.html"><i class="fa fa-check"></i><b>2</b> Creating My Database</a>
 <ul>
-<li class="chapter" data-level="" data-path="creating-my-database.html"><a href="creating-my-database.html#starting-the-databse"><i class="fa fa-check"></i>Starting the Databse</a>
-<ul>
+<li class="chapter" data-level="" data-path="creating-my-database.html"><a href="creating-my-database.html#starting-the-databse"><i class="fa fa-check"></i>Starting the Databse</a></li>
 <li class="chapter" data-level="" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-database-connection-to-my-sqlite-database"><i class="fa fa-check"></i>Creating the database connection to my SQLite database</a></li>
-</ul></li>
 <li class="chapter" data-level="2.1" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-cameras-table"><i class="fa fa-check"></i><b>2.1</b> Creating the cameras table</a></li>
 <li class="chapter" data-level="2.2" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-photos-table"><i class="fa fa-check"></i><b>2.2</b> Creating the photos table</a></li>
 </ul></li>
@@ -237,11 +235,11 @@ across tables.</p>
 <span id="cb1-2"><a href="creating-my-database.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span>
 <span id="cb1-3"><a href="creating-my-database.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-4"><a href="creating-my-database.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
-<div id="creating-the-database-connection-to-my-sqlite-database" class="section level3 unnumbered hasAnchor">
-<h3>Creating the database connection to my SQLite database<a href="creating-my-database.html#creating-the-database-connection-to-my-sqlite-database" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="creating-the-database-connection-to-my-sqlite-database" class="section level2 unnumbered hasAnchor">
+<h2>Creating the database connection to my SQLite database<a href="creating-my-database.html#creating-the-database-connection-to-my-sqlite-database" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="creating-my-database.html#cb2-1" aria-hidden="true" tabindex="-1"></a>cow_cig_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), </span>
 <span id="cb2-2"><a href="creating-my-database.html#cb2-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;CoW_CIG.db&quot;</span>)</span></code></pre></div>
-</div>
 </div>
 <div id="creating-the-cameras-table" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Creating the cameras table<a href="creating-my-database.html#creating-the-cameras-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
