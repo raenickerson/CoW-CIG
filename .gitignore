@@ -9,4 +9,4 @@ Outputs/
 Data/
 Code/
 *.pdf
-!docs/*.png
+!Website/img/*.png
