@@ -1,12 +1,10 @@
 /.Rproj.user/
 /.Rhistory/
-*png
-*Rproj
+*.Rproj
 *.docx
 *.png
-*Rproj
 Outputs/
 Data/
 Code/
 *.pdf
-!Website/img/*.png
+!Website/*.PNG
