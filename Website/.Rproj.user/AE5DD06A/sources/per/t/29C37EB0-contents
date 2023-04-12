@@ -543,6 +543,23 @@ for (i in 1:length(my_list)) {
 # always want to set i = to a number. 
 
 
+# Dependency Management ####
+
+# because packages are saved in your files assocaited with an R project, 
+# you can save different versions of different packages for different projects
+# so that your code doesn't break down
+
+# to find out where your packages are
+.libpaths()
+
+# to us renv (to do this) have to be using an R project (click that option when
+# creating the project)
+
+install.packages("renv") # but put in console so not redownloading every time
+renv::init() # also only do this in the console
+
+
+
 
 
 
