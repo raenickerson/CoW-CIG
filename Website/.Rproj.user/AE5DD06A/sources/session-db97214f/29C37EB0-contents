@@ -1,0 +1,1639 @@
+# # # # # # 
+# Rae Nickerson
+# Getting started with R
+# Started 3.15.23
+# Last updated 3.15.23
+# # # # # # 
+
+# This is a script that we are using in class to get started using R programming
+
+x <- 2 # this is a comment
+
+# Assigning Objects and noting bookmarks ####
+
+# Functions and their arguments ####
+
+?round # '?' before whatever you want to know more about
+
+round(x = 465.5678, digits = 2)
+round(465.5678, 2) # do the same thing because of how the round command is programmed
+
+# Writing your own functions ####
+
+function() {} # basic framework
+
+add <- fucntion (x, y) {
+  return (x + y) 
+}
+
+# this function takes as input two numbers, x and y, and it returns their sum
+
+add(x = 3, y = 2) # to add parentheses, shift + (
+
+z <- add(x = 3, y = 2)
+
+prin_words <- function (x,y) {
+  print(paste(x,y))
+}
+
+# Data Types ####
+
+# character data
+x <- "some text"
+class(x)
+
+x <- "1" # anything provided in quotes is a character
+class(x)
+
+# Integers
+
+x <- 1
+class(x)
+
+x <- as.integer(1)
+class(x)
+
+# Logical (true of false data)
+x <- TRUE
+class(x)
+
+y <- "TRUE"
+class(x)
+
+# Object types ####
+
+## Vectors ####
+
+# vectors are a collection of elements of the same data type:
+x <- c(1, 2, 3, 4, 5)
+class(x)
+x
+length(x)
+# vectors can be any length, including 1
+
+z <- ("A", "B", "C")
+class(z)
+length(z)
+
+# cannot have different data types in one vector. If you do, it will assume everything
+# is a character, whether or not that's true
+
+new_vector <- c(1, FALSE)
+class(new_vector) # in this case, because TRUE and FALSE are already coded in R
+# as 0 and 1, R is assuming that you want a vector with numeric values. Only TRUE,
+# FALSE, 0, and 1 can be considered logical data. 
+
+logical_vector <- c(TRUE, FALSE, TRUE, TRUE)
+sum(logical_vector) # this is SUPER useful, becuase can use the sum command in 
+# big datasets to know how often SOMETHING happened, SUPER useful
+
+# control + enter = how you run only highlighted code
+
+## Factors ####
+
+# how R stores categorical variables
+
+years <- factor(c(2021, 2022, 2023, 2022))
+years # gives us "levels" which are the unique labels for each vector, but under the hood, 
+# each level is getting a number associated with it. 
+
+# if want to change these to numbers, HAVE to add levels to as. commands
+as.numeric(levels(years))
+
+as.numeric(as.character(years)) # do this if you want to get a display of all your
+# data shown in the way it's labeled. 
+
+## Dataframes ####
+
+df <- data.frame(
+  numbers = c(1, 2, 3),
+  letters = c("A", "B", "C"),
+  colors = factor(c("blue", "red", "green"))
+  )
+
+str(df) # all have to be the same length, so need to add NA to anything that's uneven
+df
+
+### Subsetting ####
+
+df$numbers # extracting just what you want
+df$numbers[3] # take the third elemesnt of the numbers vector
+df$letters[3] # take the third element of the letters vector
+
+df [3,2] # how you call specific cells of the dataframe
+df [3, ] # will give you the whole third row
+df [ ,2] # returns column two
+
+df[ , c(1,2)] # subsetting two columns at a time
+df[ , 1:2] # from column 1 through column 2
+
+# how to filter out or remove columns or rows
+df[-1, ] # returns the dataframe without the first row
+df[ ,-1] # does the same but with column
+df[-c(1,2), ] # removes multiple at a time
+
+## Matrix ####
+
+# similar to a dataframe, but have to have all the same data types
+mat <- matrix(nrow = 5, ncol = 5, data = 1:25)
+mat # notice how it fills a columnn at a time
+t(mat) # can transpose so fills one column at a time
+
+mat[3,2] # returns values from specific cells
+
+## Arrays ####
+
+arr <- array(data = 1:24, dim = c(2, 4, 3)) # three-dimensional objects, super great if,
+# lets say you have for example a raster over multiple years
+
+arr[1, 4, 2] # = where 2 is the array number, row and column are the same
+
+## conditional subsetting ####
+# where is something located on your object?
+
+# Logical conditions are anything that is an answer to operators like =, <, >, etc.
+# == for equal to (1 equal sign is assign two things as the same, and don't want that)
+# != for not equal to
+
+# subset a dataframe based on a logical condition
+df[df$colors == green, ] # returns all rows with a "green" value across all columns
+df[df$numbers == 2, ]
+
+df[df$colors == "green" & df$numbers == 3, ] # can set more than one condition.
+# use "&" for and and "|" for or
+
+## Lists ####
+
+list1 <- list(1, 1:3, 1:10)
+
+list2 <- list(1:10, c("dog", "cat", "mouse"), c(TRUE, FALSE))
+
+list3 <- list(1:10, df)
+
+list3 [[1]] #subsetting a list.
+list3 [1] #not subsetting, just gave you the whole bucket
+
+names(list3) <- c("vector", "dataframe") # naming elements in a list
+
+list3$vector #subsetting by name
+
+# when in doubt about what your grabbing, use class(xxx) to figure out what you 
+#grabbed
+
+# Control Structures ####
+
+#if(condition) {
+  #do something
+#}
+
+vec <- 1:10
+
+if(vec == 3) {
+  print(vec +1)
+}
+
+animal <- "dog"
+
+if (animal == "cat") {
+  print("I have a cat")
+} else {
+  print("I have a dog")
+}
+
+# Repeating Operations - Vectoization ####
+
+vec <- 1:10
+
+# if I want to add 1 to each value of this vector:
+vec + 1
+
+vec > 5 # both vectorized operations because dealing with each number individually
+
+new_vec <- 2:11
+
+vec + new_vec # another vectoized op where adding by element - element 
+# 1+1, element 2+2, etc. Only works if they have the same number of elements. 
+# otherwise, will start over and start back at the beginning of the shorter list.
+# recycling the elements of the shorter vector. Will warn you, but will run, 
+# which is tricky. NEVER IGNORE THIS WARNING MESSAGE!!
+# whenever possible, us vectoization because for looping is MUCH slower
+
+# For Loops ####
+# Need when the next operation, depends on the previous one
+
+for (i in 1:10) {
+  print(i)
+}
+
+for (i in 1:10) {
+  x <- i *2
+  y <- x^2
+  print(y)
+}
+
+res <- c()
+for (i in 1:10) {
+  x <- i *2
+  y <- x^2
+  res[i] <- (y)
+} # assigning the y elements to the res vector, same as above but with a name. 
+# could do this with a dataframe, too. Always have to make the empty container
+# first. 
+
+for(i in 1:10) {
+  print("Hello!")
+}
+# nothing varies, so all going to get the same "Hello!"
+
+for(i in 1:10) {
+  print(paste("Hello!", i))
+}
+# marks each value with a "Hello!" without overwriting the original values (?)
+
+# While Loops ####
+# repeats the operation until the condition given is met
+
+i <- 1
+while(i < 6) {
+  print(i)
+  i <- i = 1
+}
+
+# change what i is assigned to, and notice will print only 1-5, until get to 6
+# if changed the order of the print(i) an i <- i + 1 lines, whould get 2-6, because
+# the order that operations are listed is the order they will be evaluated by 
+# the loop. 
+
+# Repeat Loops ####
+# will repeat the function until the assigned break, and will keep doing through
+# all possible values. 
+
+i <- 1
+repeat {
+  print(i)
+  i <- i + 1
+  if (i >5) {
+    break
+  }
+}
+
+# one more for loop example
+
+vec <- c(1, 10, 2, 9, 3, 8, 4, 7, 5, 6)
+
+for (i in vec) {
+  if (i < 5)
+    print(i)
+} else {
+    next
+}
+
+# if want to remove something that doesn't meed the qualifications, add line
+# } else {
+# vec <- vec [-i]
+# } # should only print the values that qualify. But be careful, because
+# this will change the length of your vectors by the number of items removed. 
+# and now as this loop continues to run, the interacting elements are now 
+# different.
+
+# How to trouble shoot a for-loop ####
+
+# set i to the first value
+# i <- vec[1]
+# ignore the first line of the loop because just set to do manually
+# run line two
+# if (i < 5) {
+# make sure getting the correct TRUE or FALSE
+
+# Do this for each value in the vector, checking if correct. Learn here that 
+# because i = 10, we lose our 6 (still don't understand why)
+
+# The apply family functions ####
+
+# functions in this family include apply, lapply, tapply, mapply, sapply, etc.
+# only returns a vector, array, or list when given an array or matrix. That's it.
+# lapply always returns a list
+
+mat <- matrix(data = 1:25, ncol = 5, nrow = 5)
+
+# if want to row-wise sum
+apply(X = mat, MARGIN = 1, FUN = sum) # remember 1 for rows, 2 for columns in 
+# MARGIN
+
+# if want to write your own function:
+apply(X = mat, MARGIN = 2, FUN = function(x) {
+  ((x*2 + 5)^3)
+})
+
+# Turn into dataframe
+
+df <- as.data.frame(mat)
+df$V3 <- c("A", "B", "C", "D", "E")
+
+apply(df, 1, sum) # will give you an error because can't sum with characters
+
+apply(df, 1, function(x) {print(paste("Printing", x))}) # but this does work, 
+# where returns 5 outputs where pasted the values with the "printing" title. 
+
+# if want to only function some columns or rows:
+
+apply(df[, c(1:2, 4:5)], 1, sum)
+
+# example of lapply
+
+l1 <- list(1:10, 2:20, 3:30)
+lapply(X = l1, FUN = sum)
+
+# can also customize the function
+lapply(X = l1, FUN = function(x) {(x + 10) * 456})
+
+# Using examples of repeated operations with Dragons Database ####
+
+# example 1: ####
+# what if we wanted to identify individuals who met 2 needs, let's say individuals
+# who had both diet sampled, gps tracked, and had morphological data
+
+#load DBI
+library (DBI)
+
+# connect to the database
+dragons_db <- dbConnect(drv = RSQLite::SQLite(),
+                        "../../../Course Material/Data/dragons/dragons.db")
+
+# Load in relevant tables
+
+diet <- dbGetQuery(conn = dragons_db,
+                   "Select * From diet;")
+gps <- dbGetQuery(conn = dragons_db,
+                   "Select * From gps_data;")
+morphometrics <- dbGetQuery(conn = dragons_db,
+                   "Select * From morphometrics;")
+dragons <- dbGetQuery(conn = dragons_db,
+                   "Select * From dragons;")
+
+head(dragons) # check that each has a unique ID so you can loop over
+
+inds <- dragons$dragon_id
+length(inds) # have 501 dragons total
+
+inds[1] %in% morphometrics$dragon_id #asks if individual 1 is in the morphometrics
+#table (although a vector here)
+# can do this for all tables
+
+# if doing gps data for example, and only need to know if the animal has at least
+# one entry (oppossed to all gps entries) can do the following
+inds[1] %in% unique(gps$dragon_id)
+length(unique(gps$dragon_id)) # gives you the number of dragons with at least one 
+# gps entry
+
+# how to test how long a piece of code will take to run ####
+# testing unique vs not unique
+system.time({inds[1] %in% unique(gps$dragon_id)})
+system.time({inds[1] %in% (gps$dragon_id)})
+
+# Now, we want to creat the loop ####
+
+res <- data.frame(dragon_id = NA,
+                  has_morphometric = NA,
+                  has_diet = NA,
+                  has_gps = NA)
+
+for (i in 1:legth(inds)) {
+  
+  res[i, ]$dragon_id <- inds[i]
+  
+  res[i, ]$has_morphometrics <- inds[i] %in% morphometrics$dragon_id
+  res[i, ]$has_diet <- inds[i] %in% diet$dragon_id
+  res[i, ]$has_gps <- inds[i] %in% unique(gps$dragon_id)
+  }
+
+# any opportunity you have to do pre-calculations outside of the loop, the better.
+# so for example, unique(gps$dragon_id) is going to take longer to run than making
+# a separate vector called "gps_ids" that only has unique values - 
+# gps_ids <- unique(gps$dragon_id)
+
+# Find individuals that have GPS and diet data ####
+
+res$has_gps & res$has_diet # only returns TRUE for individuals with both
+[res$has_gps & res$has_diet, ] # want to subset the rows, and keep all columns
+
+nrow(res[res$has_gps & res$has_diet, ]) # to get the number of dragons
+#or
+length(res[res$has_gps & res$has_diet, ]$dragon_id)
+
+# Example 2 - efficient ways to load in csv files in a loop ####
+
+?list.files
+
+files <- list.files("individual_telemetry_csv", pattern = ".csv", full.names = TRUE) # which is the
+# name of the folder with all the different csv's, and takes out any other file types
+# full.names = TRUE includes the path in the names
+
+res <- data.frame()
+for (i in 1:length(files)) {
+  csv <- read.csv(files[i])
+  res <- rbind(res, csv) #cbind is the command to do the same but with columns
+}
+
+# notice there are a LOT of points, and will need to delete points from before and
+# after collar was deployed
+
+# do the same thing using lapply ####
+# usually, using lapply is SO MUCH FASTER
+
+csv_list <- lapply(files, FUN = read.csv)
+
+# need to get them all in the same dataframe
+
+res3 <- do.call("rbind", csv_list)
+nrow(res3)
+nrow(res) # check that they are the same
+
+# Example 3 - making plots for just the points you want ####
+
+# values of the x axis
+x <- 1:10
+
+# slope coeff
+m <- 0.5
+
+# calculate values on the y-axis
+y <- m*x
+
+# Plot
+plot(x = x, y = y, type = "l")
+
+# say that we have a set of slopes
+slopes <- seq(from = 0, to = 1, by = 0.01)
+
+# simplify by doing all at once
+for (m in 1: length(slopes)) {
+  
+  # calculate values on the y-axis
+  y <- slopes[m] * x
+  
+  pdf(file = paste0("plots/plot_slope_", slopes[m], ".pdf", sep = ""), #could save as png, etc.
+      height = 4, wiedth = 4) #0 after paste removes spaces
+  # Plot
+  plot(x = x, y = y, type = "l", ylim = c(0, 10),
+       main = paste("Slope = ", slopes[m]))
+  dev.off()
+}
+
+# can also do with lapply ####
+
+plot_list <- lapply(X = slopes, FUN = function(m) {
+  y <- m * x
+  
+  pdf(file = paste0("plots/plot_slope_", slopes[m], ".pdf", sep = ""), #could save as png, etc.
+      height = 4, wiedth = 4, units = "in", res = 200) #0 after paste removes spaces
+  # Plot
+  plot(x = x, y = y, type = "l", ylim = c(0, 10),
+       main = paste("Slope = ", slopes[m]))
+  dev.off()
+})
+
+# to plot only certain plots from this list
+
+plot(plot_list[[1]])
+
+# Troubleshooting in R ####
+
+# ?function # gives you functions in base R
+# ??function # gives you functions in all packages
+
+# all does the same thing:
+dragons[, "dragon"][1]
+dragons$dragon[1]
+dragons[1, ]$dragon
+
+# 'x' must be atomic error means that the object you've created is one dimensional
+# if you don't want that, R was unable to decipher between your different objects
+# usually means you added the list command where you didn't need it
+
+species_list <- list(unique(dragons$species)) # won't work
+sort(unique(dragons$species)) # will work because the sort command want a vector
+
+# error - attempt to apply non-function - means likely that R thinks something is
+# a function that you didn't mean to be a function - usually need more parentheses
+# or you forgot something between your objects (for example, a math command)
+
+# two ways of doing the same thing for a dataframe
+dat[[2]]
+dat[, 2]
+
+# NA associated errors - R will always return NA even if there are only some NAs
+
+# if want to remove na's, can add na.rm = TRUE. Otherwise have to code as something
+# else
+
+# troubleshooting a vector ####
+
+my_list <- list(10, 74687, TRUE, "A", FALSE, 65, "hello")
+
+for (i in 1:length(my_list)) {
+  print(my_list[[i]] + 10)
+}
+
+# this won't work, where do we start troubleshooting?
+# first, step i = to the first value, and run row by row
+# another trick - go into your environment and see what the latest value was
+# before the loop failed. Then put that number in, and re-run to find the error
+
+# always want to set i = to a number. 
+
+
+# Dependency Management ####
+
+# because packages are saved in your files assocaited with an R project, 
+# you can save different versions of different packages for different projects
+# so that your code doesn't break down
+
+# to find out where your packages are
+.libpaths()
+
+# to us renv (to do this) have to be using an R project (click that option when
+# creating the project)
+
+install.packages("renv") # but put in console so not redownloading every time
+renv::init() # also only do this in the console
+
+# now can look in renv.lock to see what versions you're running
+# in the library folder is your local project library, which should be in your
+# gitignore folder
+
+# Then, will need to go into terminal and "git init" to create a repository,
+# do your add alls, commit and push
+
+# then can go back to R, start your work on a new script, but will need to reinstall
+# all packages that you want. 
+
+renv::snapshot # also do this only in the bottom, but takes a sanpshot of your
+# library at this time. Will ask if you want to proceed (lock) want to say yes
+renv::status() # will let you know your packages are up to date in the lock. If
+# says it isn't, use snapshot to lock in those package versions
+renv::remove("tidyverse") # also only in the bottom if want to remove something
+renv::status # to check if the install or uninstall changed anything. Will 
+# need to follow up with snapshot. 
+
+renv:restore # if accidentally removed a package that you didn't mean to. 
+# might have to have your r-script folder in your renv folder in the renv project
+# folder. Also, might be a bit of a lag for snapshots, keep checking the status
+
+# to install less-recent versions of packages:
+
+# first, need to search the package in CRAN, then search the raster for older versions
+# copy the version number you want (ex 1.9-27) then use dev.tools function
+install.packages("devtools")
+devtools::install_version("raster", version = "1.9-27") # might get a warning, 
+# but likely the package was installed. Also, may need to restart your session
+# if seeing only the newest version of the package, then try the devtools function
+# again. Also, search for it in the lockfile to double check. If getting a warning
+# about 'overlay', may need to install an older version of the other package it 
+# mentions first, then try again to load the older version of the first package. 
+
+# if adding renv to en existing project, just do renv::init()
+
+# if want to share your project with someone including the packages and their versions,
+# then will do the same git add, commit, and push did before in terminal. Then the
+# collaborator clones my repository onto their computer, opens in r, do renv::init()
+# then should be good to go as long as always checking for updates and pulling 
+# before pushing, and choose option 1 (most of the time)
+
+# Tidyverse ####
+
+library(tidyverse)
+library(DBI)
+
+# Load in Data 
+
+dragons_db <- dbConnect(RSQLite::SQLite(),
+                        "dragons(RStudio).db")
+
+# load in all tables ####
+
+dragons <- dbGetQuery(dragons_db, "SELECT * FROM dragons;")
+captures <- dbGetQuery(dragons_db, "SELECT * FROM captures;")
+capture_sites <- dbGetQuery(dragons_db, "SELECT * FROM capture_sites;")
+morphometrics <- dbGetQuery(dragons_db, "SELECT * FROM morphometrics;")
+diet <- dbGetQuery(dragons_db, "SELECT * FROM diet;")
+tags <- dbGetQuery(dragons_db, "SELECT * FROM tags;")
+deployments <- dbGetQuery(dragons_db, "SELECT * FROM deployments;")
+telemetry <- dbGetQuery(dragons_db, "SELECT * FROM gps_data;")
+
+# Subsetting columns ####
+
+head(morphometrics)
+class(morphometrics)
+
+# using base R
+head(morphometrics[, c(2, 3, 4, 5)])
+head(morphometrics[, c("dragon_id", "date")])
+
+# using tidyverse
+head(select(.data = morphometrics, dragon_id, date, total_body_length_cm, wingspan_cm))
+head(select(morphometrics, dragon_id:wingspan_cm)) # this version works because
+# pulling consecutive columns
+
+# how to drop ID columns from a table
+head(select(morphometrics, -measurement_id))
+
+# subsetting rows ####
+
+# Positional subsetting using base R
+morphometrics[1:10, ]
+
+# using tidyverse:
+slice(mophometics, 1:10) # for consecutive rows
+slice(morphometrics, c(1, 45, 3)) # for non consecutive
+
+# conditional subsetting
+morphometrics[morphometrics$wingspan_cm > 1000, ] # using base R
+filter(morphometrics, wingspan_cm > 1000) # using tidyverse
+
+# concatenating operations ####
+
+# remove primary key if not needed, and filter wingspans > 1000cm
+no_pkey <- select(morphometrics, -measurement_id)
+larger_than_10m <- filter(no_pkey, wingspan_cm > 1000) # not very eloquent
+
+# using piping instead
+
+larger_than_10cm <- morphometrics %>% 
+  select (-measurement_id) %>% 
+  filter(wingspan_cm > 1000) # does the same thing by taking the output from 
+# the previous line, and using it as input in the next line. WAY more efficient
+# and easier to read. Note - should start a new line with each pipe.
+
+# adding new columns ####
+morphometrics %>% 
+  select(-measurement_id) %>% 
+  mutate(wingspan_m = wingspan_cm/100) %>% 
+  filter(wingspan_m > 10) %>% 
+  slice(1:6) # this bit is the same as using head, asking for only what want to see
+
+# Tibbles ####
+morph_tibble_10m <- morphometrics %>% 
+  as_tibble() %>% # tells R only want to see the first 10 rows
+  select(-measurement_id) %>% 
+  mutate(wingspan_m = wingspan_cm/100) %>% 
+  filter(wingspan_m > 10)
+
+# if want to turn back into a regular df, not a tibble df. Important because some
+# packages can only work with dfs
+class(morph_tibble_10m)
+class(as.data.frame(morph_tibble_10m))
+
+# Joining Tables ####
+
+head(morphometrics)
+head(dragons)
+
+# join the measurements with information about individuals (sex, age, species)
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") # the one shared variable
+
+# what if the joining column/shared variable do not have the same name?
+morphometrics %>% 
+  as_tibble() %>% 
+  rename(dragon = dragon_id) # new name always goes first
+
+# to join with different names
+morphometrics %>% 
+  as_tibble() %>% 
+  rename(dragon = dragon_id) %>% 
+  left_join(dragons, by = c("dragon" = "dragon_id"))
+
+# moving columns ####
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  relocate(sex, .after = dragon_id) %>% 
+  relocate(species, .after = sex) %>% 
+  relocate(age_class, .after = species)
+
+# or, do all in one line
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  relocate(sex:species, .after = dragon_id) # if they are consecutive, can 
+# move all at once
+
+# Calculations by group ####
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  group_by(age_class) %>% 
+  summarize(min_tail = min(tail_length_cm),
+            mean_tail = mean(tail_length_cm),
+            max_tail = max(tail_length_cm))
+
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  group_by(age_class) %>% 
+  tally() # counts them up for you
+
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  group_by(species) %>% 
+  tally() %>%
+  arrange(n) # counts them up for you, and sorts them by biggest to smallest.
+
+# to do other way, "arrange(desc(n))"
+
+# Filtering measurements ####
+species_over30 <- morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  group_by(species) %>% 
+  tally() %>%
+  arrange(n) %>% 
+  filter(n>30) %>% 
+  pull(species) # can only pull one column at a time, because turns into a vector
+
+# why need two steps - now filter
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  filter(species %in% species_over30)
+  
+# Conditional value assignments ####
+# ex. - create a variable that connects sex and age class
+# first, see what values need to account for
+unique(dragons$sex)
+unique(dragons$age_class) # need to double check this, because won't give error
+
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  mutate(sex_age_combo = case_when(
+    sex == "M" & age_class =="Adult" ~ "Adult Male",
+    sex == "F" & age_class == "Adult" ~ "Adult Female",
+    sex == "M" & age_class == "Subadult" ~ "Subadult Male",
+    sex == "F" & age_class == "Subadult" ~ "Subadult Female",
+    sex == "M" & age_class == "Juvenile" ~ "Juvenile Male",
+    sex == "F" & age_class == "Juvenile" ~ "Juvenile Female",
+    is.na(sex) & age_class == "Adult" ~ "Adult Unknown",
+    is.na(sex) & age_class == "Subadult" ~ "Subadult Unknown",
+    is.na(sex) & age_class == "Juvenile" ~ "Juvenile Unknown"
+    ))
+
+# how to assign "unknown" to anything that is not the case of "X"
+morphometrics %>% 
+  as_tibble() %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  mutate(sex_age_combo = case_when(
+    sex == "M" & age_class =="Adult" ~ "Adult Male",
+    sex == "F" & age_class == "Adult" ~ "Adult Female",
+    sex == "M" & age_class == "Subadult" ~ "Subadult Male",
+    sex == "F" & age_class == "Subadult" ~ "Subadult Female",
+    sex == "M" & age_class == "Juvenile" ~ "Juvenile Male",
+    sex == "F" & age_class == "Juvenile" ~ "Juvenile Female",
+    TRUE ~ "Unknown" # means in every other case, assign this value
+  )) %>% 
+  group_by(sex_age_combo) %>% 
+  tally() # notice gives you no juveniles, because that's when we don't know sex
+
+# Pivot functions ####
+# when working in tidy, you almost always want to be in long format
+
+?pivot_longer
+?pivot_wider
+
+head(morphometrics)
+
+morph_long <- morphometrics %>% 
+  pivot_longer(cols = total_body_length_cm:claw_length_cm,
+               names_to = "measurement_type",
+               values_to = "measurment") # only works consec.
+
+# or for base R
+pivot_longer(data = morphometrics, ...)
+
+# going the other way around
+morph_wide <- morph_long %>% 
+  pivot_wider(names_from = measurement_type,
+              values_from = measurement) # notice, do not need "" here because
+                                          # the column names already exist
+
+# often, it's helpful to run each line of pipe one at a time as you go, then
+# assign a name to the object at the end when you know it's going to work. 
+
+# Grouping by more than one categorical variables/multiple columns ####
+morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  group_by(age_class, sex, species) %>% 
+  summarize(mean_wingspan = mean(wingspan_cm)) # or could use "tally()" on this line
+
+# If want to see it as a table, add "View %>% " below after last blue text
+
+# slicing by group ####
+morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  group_by(age_class, sex, species) %>% 
+  slice(1) # good for getting the "first date, gps point, etc. for an individ.
+          # but first need to be ordered by date
+
+telemetry %>% 
+  group_by(dragon_id) %>% 
+  arrange(timestamp) %>% 
+  slice(1) # gives us the starting location for each individual, need to make sure
+          # points are within chronological order WITHIN each individual
+
+# if want the last gps point
+telemetry %>% 
+  group_by(dragon_id) %>% 
+  arrange(desc(timestamp)) %>% 
+  slice(1)
+
+# Filtering by more than one logical condition/multiple conditions ####
+# filter adults with body length greater than 10 meters
+morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  filter(total_body_length_cm > 1000 &
+  age_class == "Adult")
+
+# filter either adults or subadults with body length > 10m
+morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  filter(total_body_length_cm > 1000 &
+           (age_class == "Subdult" | age_class == "Adult")) # line = or
+                                                            # need double paren
+                                                            # for order
+# or 
+morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  filter(total_body_length_cm > 1000 &
+           age_class %in% c("Subdult", "Adult"))
+
+# case study - how to break down a single CSV into workable parts
+
+full <- read.csv("full_data.csv")
+
+# recreate the dragons table
+full %>% 
+  select(dragon_id, sex, age_class, species, update_timestamp) %>%  # if end here, will have duplicates
+  distinct() %>%  # removes duplicates that can be used on dfs. unique = only vectors
+  nrow() # to check rows
+
+# may do the same thing, Simona is going to check
+
+# how to add a primary key/unique identifier ####
+# recreate the diet table
+full %>% 
+  select(dragon_id, sample_id, date_diet_sample, item_id, item) %>%
+  distinct() %>% 
+  mutate(diet_id = 1:nrow(.)) %>%  # gives you 1 - last row of the current df
+  relocate(diet_id, .before = dragon_id)
+
+# manipulating strings ####
+# how to separate out, for example, a "name_dragonid" column with different 
+# numbers of characters - use substring - based on delimiters
+
+dep_alt <- read.csv("deployments_alt.csv")
+dep_alt %>% 
+  mutate(dragon_id = stringr::word(deployment_id, 2, 2, "_"),
+         tag_id = stringr::word(tag_id, 1, 1, "_"))
+
+# More practice in TIDY - garden demo ####
+
+library(readxl) # helps to read in all kinds of spreadsheet files, including xlsx, etc.
+# can use read_xls or read_excel or read_xlsx, doesn't matter
+library(tidyverse)
+
+read_xlsx()
+
+bed1 <- readxl::read_xlsx("garden_log.xlsx", sheet = 1)
+view(bed1)
+# always double check that your NA's are loading correctly
+
+bed1 <- readxl::read_xlsx("garden_log.xlsx", sheet = 1, na = "NA") %>% 
+  mutate(bed = 1)
+
+bed2 <- readxl::read_xlsx("garden_log.xlsx", sheet = 2, na = "NA") %>% 
+  mutate(bed = 2)
+
+bed3 <- readxl::read_xlsx("garden_log.xlsx", sheet = 3, na = "NA") %>% 
+  mutate(bed = 3)
+
+weather <- readxl::read_xlsx("garden_log.xlsx", sheet = 4, na = "NA")
+
+# merge garden data ####
+
+garden <- bed1 %>% 
+  bind_rows(bed2) %>% 
+  bind_rows(bed3) # better than rbind because can match columns in different orders
+
+# get an error, let's check what's going on
+
+bed1$height_week3
+bed2$height_week3 
+
+# not recognizing NA's right. Add NA info to above, and rerun
+
+colnames(garden)
+
+# prepare data for input into database ####
+
+# the database will have a beds table, a plants table, sprouts table, height
+# table, and a fruits table
+
+# beds table
+beds <- garden %>% 
+  select(bed) %>% 
+  distinct()
+
+# plants table
+plants <- garden %>% 
+  select(plant, bed)
+
+# sprouts table
+sprouts <- garden %>% 
+  select(plant, nsprouts_week1:nsprouts_week12) %>% 
+  pivot_longer(cols = nsprouts_week1:nsprouts_week12,
+               values_to = "n_sprouts",
+               names_to = "week") %>% 
+  mutate(week = as.numeric(str_extract(week, "\\d+")))
+
+# "command - f" gets you to replace function. Just make sure selected/highlight
+# only the portion of code you want to change, and have that selected!!!
+
+
+# to change the names of the new columns, can use "substring" in base R like
+# this: mutate(week = substr(week, 14, 15))
+# or, use what's above with tidyverse
+  
+# heights table
+heights <- garden %>% 
+  select(plant, height_week1:height_week12) %>% 
+  pivot_longer(cols = height_week1:height_week12,
+               values_to = "heights",
+               names_to = "week") %>% 
+  mutate(week = as.numeric(str_extract(week, "\\d+")))
+
+# fruits table
+fruits <- garden %>% 
+  select(plant, nfruits_week1:nfruits_week12) %>% 
+  pivot_longer(cols = nfruits_week1:nfruits_week12,
+               values_to = "n_fruits",
+               names_to = "week") %>% 
+  mutate(week = as.numeric(str_extract(week, "\\d+")))
+
+# answering questions with our data ####
+
+# count up the number of fruiting plants each week
+
+fruits %>% 
+  mutate(status = case_when(
+    n_fruits == 0 ~ "not_fuiting",
+    n_fruits > 0 ~ "fruiting",
+    TRUE ~ NA_character_
+  ))
+
+# now group by week and status, then count them up
+
+group_by(week, status) %>% 
+  tally()
+# something weird with NAs. Lets look
+
+fruits %>%
+  filter(is.na(n_fruits) & week == 1)
+
+# fix so all fruiting veggies have 0's not NA before they fruit
+
+new_fruits <- fruits %>% 
+  mutate(n_fruits = case_when(
+    plant %in% c("spinach", "garlic", "carrots") ~ NA_real_,
+    is.na(n_fruits) & plant %in% !c("spinach", "garlic", "carrots") ~ 0,
+    !is.na(n_fruits) & !plant %in% c("spinach", "garlic", "carrots") ~ n_fruits
+    ))
+  
+
+# data visualization with ggplot ####
+
+library(ggplot2)
+library(tidyverse)
+library(DBI)
+
+# Load in Data 
+dragons_db <- dbConnect(RSQLite::SQLite(),
+                        "dragons(RStudio).db")
+
+dragons <- dbGetQuery(dragons_db, "SELECT * FROM dragons;")
+captures <- dbGetQuery(dragons_db, "SELECT * FROM captures;")
+capture_sites <- dbGetQuery(dragons_db, "SELECT * FROM capture_sites;")
+morphometrics <- dbGetQuery(dragons_db, "SELECT * FROM morphometrics;")
+diet <- dbGetQuery(dragons_db, "SELECT * FROM diet;")
+tags <- dbGetQuery(dragons_db, "SELECT * FROM tags;")
+deployments <- dbGetQuery(dragons_db, "SELECT * FROM deployments;")
+telemetry <- dbGetQuery(dragons_db, "SELECT * FROM gps_data;")
+
+# Scatterplots ####
+# wingspan as a function of total body length
+
+ggplot(data = morphometrics, mapping = aes(x = total_body_length_cm,
+                                           y = wingspan_cm)) +
+  geom_point()
+
+# make it prettier
+
+ggplot(data = morphometrics, 
+       mapping = aes(x = total_body_length_cm, y = wingspan_cm)) +
+  geom_point() + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)")
+
+# another way to change axis labels
+ggplot(data = morphometrics, 
+       mapping = aes(x = total_body_length_cm, y = wingspan_cm)) +
+  geom_point() + 
+  xlab(x = "Total Body Length (cm)") +
+  ylab("Wingspan (cm)")
+
+# colors
+# changes them all
+ggplot(data = morphometrics, 
+       mapping = aes(x = total_body_length_cm, y = wingspan_cm)) +
+  geom_point(color = blue) + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)")
+
+# coloring by group:
+morphometrics %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point() + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class")
+
+# little confusing here, because the legend is named "color" now because 
+# of our original aesthetics we set. But remember they all match 1-1
+
+# adding details to our legend - can either use "case when" in tidyverse, or
+# can do it directly here
+morphometrics %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point() + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class") +
+  scale_color_discrete(labels = c("Adult (> 3 years)",
+                                  "Juvenile (< 1 year)",
+                                  "Subadult (> 1 and < 3 years"))
+
+# rearranging values on legend and adding a theme
+morphometrics %>% 
+  left_join(dragons) %>% 
+  mutate(age_class = factor(age_class, levels = c("Juvenile",
+                                                  "Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point() + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class") +
+  scale_color_discrete(labels = c("Juvenile (< 1 year)",
+                                  "Subadult (> 1 and < 3 years)",
+                                  "Adult (> 3 years)")) +
+  ugly_theme <- theme(legend.position = "bottom",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_line(color = "black", size = 1.2))
+
+# element_blank is how you remove anything
+# can save themes to use later (see our ugly_theme)
+
+# using pre-made themes
+morphometrics %>% 
+  left_join(dragons) %>% 
+  mutate(age_class = factor(age_class, levels = c("Juvenile",
+                                                  "Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point() + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class") +
+  scale_color_discrete(labels = c("Juvenile (< 1 year)",
+                                  "Subadult (> 1 and < 3 years)",
+                                  "Adult (> 3 years)")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+# notice, that any customization you want in theme has to go after you call
+# in a preexisting theme, or else it will override it. 
+
+# other good themes; theme_minimal(), theme_void() (void is also good for tracks)
+# theme_classic(), etc.
+
+# making points transparant
+
+morphometrics %>% 
+  left_join(dragons) %>% 
+  mutate(age_class = factor(age_class, levels = c("Juvenile",
+                                                  "Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point(alpha = 0.3) + 
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class") +
+  scale_color_discrete(labels = c("Juvenile (< 1 year)",
+                                  "Subadult (> 1 and < 3 years)",
+                                  "Adult (> 3 years)")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+# reminder when deciding where to put your customizations - anything conditional
+# on the data goes inside aes, anything that's the same across the board goes 
+# outside
+
+# adding layers with different aesthetics
+reg <- lm(formula = wingspan_cm ~ total_body_length_cm, data = morphometrics) 
+coefs <- reg$coefficients # grabbing the coefficients out of the model object
+
+morphometrics %>% 
+  left_join(dragons) %>% 
+  mutate(age_class = factor(age_class, levels = c("Juvenile",
+                                                  "Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point(alpha = 0.3, shape = 8) + 
+  geom_abline(aes(slope = coefs[2], intercept = coefs[1]),
+              color = "gray60", size = 2, linetype = "dashed") +
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class") +
+  scale_color_discrete(labels = c("Juvenile (< 1 year)",
+                                  "Subadult (> 1 and < 3 years)",
+                                  "Adult (> 3 years)")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+# Difference between fill and color
+morphometrics %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = age_class, y = wingspan_cm, fill = age_class)) +
+  geom_boxplot()
+
+# if something isn't working with the shape you're trying to change the color
+# of, try swapping Fill and Color. Some have both, and can set both
+
+# getting rid of redundant info
+# removing the legend
+morphometrics %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = age_class, y = wingspan_cm, fill = age_class)) +
+  geom_boxplot() +
+  theme(legend.position = "none")
+
+# removing the labels on the x axis
+morphometrics %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = age_class, y = wingspan_cm, fill = age_class)) +
+  geom_boxplot() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+# boxplots by species
+morphometrics %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = species, y = wingspan_cm, fill = age_class)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+# multi-panel figures
+morphometrics %>% 
+  left_join(dragons) %>% 
+  mutate(age_class = factor(age_class, levels = c("Juvenile",
+                                                  "Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(aes(x = total_body_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) +
+  geom_point() + 
+  facet_wrap(~ species) +
+  labs(x = "Total Body Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class") +
+  scale_color_discrete(labels = c("Juvenile (< 1 year)",
+                                  "Subadult (> 1 and < 3 years)",
+                                  "Adult (> 3 years)")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+
+# Histogram
+
+ggplot(morphometrics, aes(x = total_body_length_cm)) +
+  geom_histogram()
+# notice that we didn't have to tell R how many dragons we have data for, 
+# ggplot does that for us. 
+
+# if want to change the number of bins
+ggplot(morphometrics, aes(x = total_body_length_cm)) +
+  geom_histogram(bins = 100)
+
+# Density Plot
+
+ggplot(morphometrics, aes (x = total_body_length_cm)) +
+  geom_density()
+
+# can also use tidyverse language - which is super useful if only want 
+# some information from a table
+morphometrics %>% 
+  ggplot(aes (x = total_body_length_cm)) +
+  geom_density()
+
+
+# More Tidyverse Practice ####
+
+# Bar Plots that include error bars ####
+ggplot(diet, aes(x = item, )) +
+  geom_bar(fill = "orange") + 
+  labs(x = "", y = "Count") +
+  theme_bw()
+
+# if want proportions/relative frequencies instead of counts
+ggplot(diet, aes(x = item)) +
+  geom_bar(aes(y = ..prop.., group = 1), fill = "orange") + 
+  labs(x = "", y = "Proportion") +
+  theme_bw()
+
+# remember here, if you want to color columns based on a variable, it goes in 
+# aes. If not, it doesn't need to be inherited. Just put in geom_bar. If put 
+# in aes, will consider "orange" a variable you want to use. If wanted different
+# colors based on a variable, would put "fill = "item". Also, needs to be in the 
+# right parentheses. 
+
+# Broken down by species
+diet %>% 
+  left_join(dragons) %>% 
+  ggplot(aes(x = item)) +
+  geom_bar(aes(y = ..prop.., group = 1), fill = "orange") + 
+  facet_wrap(~ species) +
+  labs(x = "", y = "Proportion") +
+  theme_bw()
+
+# adding error bars ####
+# want to get the relative frequency of each item, then get the standard deviation
+
+# calculate the count per item per species, and the total number of items per
+# species, then divide to get frequency. 
+freq_items <- diet %>% 
+  left_join(dragons) %>%
+  group_by(item, species) %>% 
+  tally()
+  
+# total number of items per species
+n_items <- diet %>% 
+  left_join(dragons) %>% 
+  group_by(species) %>% 
+  tally()
+
+# Ratio
+# your left table (the first) should be the one that has the number of rows/columns
+# that you want to have at the end. 
+freq_items %>% 
+  left_join(n_items, by = "species") %>% 
+  rename(n = n.x, tot = n.y) %>% # had to do this because R renamed them above 
+  mutate(ratio = n/tot) %>% 
+  group_by(item) %>% 
+  mutate(mean_freq = mean(ratio),
+         sd_freq = sd(ratio)) %>% 
+  select(item, mean_freq, sd_freq) %>% 
+  distinct() %>% 
+  mutate(lwr = mean_freq - sd_freq,
+         upr = mean_freq + sd_freq) %>% 
+  ggplot(aes(x = item, y = mean_freq)) +
+  geom_bar(stat = "identity", fill = "orange") + 
+  geom_errorbar(aes(ymin = lwr, ymax = upr), color = "orange", width = 0.5) +
+  theme_bw() +
+  labs(x = "", y = "Frequency")
+
+# identity function = asks geom_bar not to do it's own calculations
+# if having issues, try color instead of fill, or vice versa
+
+# same plot, points instead of bars
+freq_items %>% 
+  left_join(n_items, by = "species") %>% 
+  rename(n = n.x, tot = n.y) %>% # had to do this because R renamed them above 
+  mutate(ratio = n/tot) %>% 
+  group_by(item) %>% 
+  mutate(mean_freq = mean(ratio),
+         sd_freq = sd(ratio)) %>% 
+  select(item, mean_freq, sd_freq) %>% 
+  distinct() %>% 
+  mutate(lwr = mean_freq - sd_freq,
+         upr = mean_freq + sd_freq) %>% 
+  ggplot(aes(x = item, y = mean_freq)) +
+  geom_point(color = "orange") + 
+  geom_errorbar(aes(ymin = lwr, ymax = upr), color = "orange", width = 0.5) +
+  theme_bw() +
+  labs(x = "", y = "Frequency")
+
+# same plot points alternative 
+freq_items %>% 
+left_join(n_items, by = "species") %>% 
+  rename(n = n.x, tot = n.y) %>% # had to do this because R renamed them above 
+  mutate(ratio = n/tot) %>% 
+  group_by(item) %>% 
+  mutate(mean_freq = mean(ratio),
+         sd_freq = sd(ratio)) %>% 
+  select(item, mean_freq, sd_freq) %>% 
+  distinct() %>% 
+  mutate(lwr = mean_freq - sd_freq,
+         upr = mean_freq + sd_freq) %>% 
+  ggplot(aes(x = item, y = mean_freq)) +
+  geom_pointrange(aes(ymin = lwr, ymax = upr), color = "orange") + 
+  theme_bw() +
+  labs(x = "", y = "Frequency")
+
+# what about plotting uncertainty/confidence intervals around a regression line?
+reg <- lm(formula = wingspan_cm ~ total_body_length_cm,
+          data = morphometrics) # wingspan as a function of total body length
+
+coefs <- reg$coefficients
+
+mod_pred <- predict(reg, se.fit = TRUE)
+
+preds <- data.frame(mean = mod_pred$fit,
+                    upr = mod_pred$fit + 1.96 * mod_pred$se.fit,
+                    lwr = mod_pred$fit - 1.96 * mod_pred$se.fit)
+
+p2 <- morphometrics %>% 
+  ggplot(aes(x = total_body_length_cm, y = wingspan_cm)) +
+  geom_point() +
+  geom_ribbon(aes(ymin = preds$lwr, ymax = preds$upr),
+              fill = "orange", alpha = 0.3) +
+geom_line(aes(y = preds$mean)) +
+  theme_bw()
+
+# geom_path = see book, but useful for plotting movement data that plots 
+# lines in the order they appear - the way to go for chronological data - 
+# instead of geom_line
+
+# Colorblind plots ####
+library(viridis)
+
+ggplot(diet, aes(x = item, fill = item)) +
+  geom_bar() +
+  labs(x = "", y = "Count") +
+  theme_bw()
+
+# default pallet that is not colorblind friendly
+
+p1 <- ggplot(diet, aes(x = item, fill = item)) +
+  geom_bar() +
+  labs(x = "", y = "Count") +
+  theme_bw() +
+  scale_fill_viridis_d(option = "plasma") 
+
+# can pick a, b, c, or d, etc., and can change options, or just leave it out
+
+# Arranging plots to be shown together ####
+library(patchwork)
+
+p1 | p2 # side by side
+
+p1 / p2 # one on top of the other
+
+p1 + p2 + p1 + p2  # side by side, + sign not recommended
+
+(p1 | p2 | p2) / p1 # if want to change the order. Just like arithmetic
+
+((p1 | p2 | p2) / p1) + plot_annotation(tag_levels = 'A') # gives you labels
+
+(p1 + p2 + p1 + p2) + plot_layout(ncol = 1, nrow = 4)
+
+p1 / (p2 | p2)
+
+# saving the final plot for manuscript submission
+
+ggsave("my_plot.tiff", plot = p1, width = 80, height = 100, 
+       units = "px", dpi = 300, scale = 0.8)
+
+# scale will shrink or grow the text vs. the geometries. 1 is standard.
+
+# but can do pdf, png, etc. Use author guidelines for dimensions, units, dpi
+# saves the file in the files drop down, and every time you re-save it, it 
+# will overwrite the file. 
+
+# Dates and Times in R ####
+
+# how base R handles dates and times
+d <- "2023-04-19"
+class(d)
+
+# to turn into a date
+d <- as.POSIXct(d) # number of second since
+class(d)
+
+d <- as.POSIXlt(d) # a list with all types of info, can handle dates and times
+class(d)
+
+# if run "d" assumes we are in MDT. But what if we aren't in that timezone?
+Sys.timezone() # to double check
+
+# Timestamps
+dt <- "2023-04-19 13:42:00"
+class(dt)
+dt <- as.POSIXlt(dt)
+class(dt)
+dt <- as.POSIXct(dt)
+class(dt)  
+
+# Dates as dates
+d <- "2023-04-19"
+as.Date(d)
+as.Date(dt) # notice can only retain information about the date, drops time
+
+as.Date("04/19/2023") # gives us an error - this won't work. 
+as.POSIXct("04/19/2023")
+as.POSIXlt("04/19/2023")
+
+# work around
+as.Date("04/19/2023", format = "%m/%d/%Y") # will work for all 3 above
+
+# notice Y has to be uppercase to get 4 digits, otherwise will give 2 digits
+
+# Calculations on date-time objects:
+
+d1 <- as.POSIXct("2023-04-19")
+d2 <- as.POSIXlt("2023-04-20")
+d3 <- as.Date("2023-04-17")
+
+# want to know how many days are between
+
+d1 - d3 
+# this doesn't work because different formats because can't do math on 
+# dates that are not numbers. 
+
+d1 - d2 # will work, because formats are similar enough
+
+# Using Tidyverse and Lubridate ####
+library(lubridate)
+
+# Lubridate functions for dates:
+ymd("2023-04-19")
+mdy("04/19/2023") # notice will come out the same no matter the input
+dmy("19/4/23")
+
+# Lubridate for times:
+class(hms("00:00:01"))
+# notice, class is a period
+hm()
+ms()
+
+# Lubridate for timestamps - any combo of the above 
+class(ymd_hms("2023-04-19 14:01:00")) 
+# notice! different assumption of our time zone!
+# also notice, still a date! That's fine in this case
+
+dmy_hm()
+mdy_hms()
+
+# What happens if we use the wrong function?
+d <- "04/19/2023"
+ymd(d) # lets us know we chose the wrong format
+mdy(d) # works
+
+# Extracting components of date-time object
+dt <- ymd_hms("2023-04-19 14:01:00")
+day(dt)
+year(dt)
+month(dt)
+hour(dt)
+minute(dt)
+second(dt)
+
+# Fixing timezone
+OlsonNames() # lists the ones you want
+dt <- ymd_hms("2023-04-19 14:01:00", tz = "America/Denver")
+
+# converting to different timezone
+with_tz(dt, tz = "Europe/Rome")
+
+# Force into a different timezone
+force_tz(dt, tz = "Europe/Rome")
+
+# Special data types from Lubridate ####
+
+# Periods
+class(hms("03:10:05")) # describes a period of time
+class(hms("24:00:00")) # treats them as hours, even if go over a days worth
+days(1)
+months(3)
+weeks(2)
+years(4)
+minutes(10)
+
+# Durations
+dmonths(3) # describes the duration of an event
+dyears(4)
+
+# Calculations with periods and durations
+
+# add a period of two months
+dt + months(2)
+
+# add a duration of 2 months
+dt + dmonths(2)
+
+# these look different because duration splits things evenly. Not really useful
+# better to use period, don't use duration
+
+dt_minus3y <- dt - years(3)
+wday(dt_minus3y, label = TRUE)
+
+# Intervals #### need when matters WHEN a timestamp takes place
+
+s <- interval(start = d3, end = d1) 
+# BE CAREFUL if these are in different timezones!!
+class(s)
+int_start(s)
+int_end(s)
+int_length(s)
+int_length(s)/60/60
+
+# is a time inside your interval
+ymd_hms("2023-04-19 14:00:00") %within% s
+
+# shifting an interval
+s
+int_shift(s, by = months(1))
+
+# if want to see if sites were surveyed over the same time period
+i <- interval(start = "2023-10-20", end = "2023-10-25", tzone = "America/Denver") 
+int_overlaps(s, i)
+
+# alternative way to creating intervals
+s <- "2023-03-20" %--% "2023-04-20"
+force_tz(s, "America/Denver") # but, this won't work, will be default. Not flexible
+
+# In lubridate, you do not need to account for daylight savings
+
+# Force only changes the label, with changes to the time in that new timezone
+# google the cheat sheet on tidyverse lubridate!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,248 @@
+# Rae Nickerson
+# Data Visualization Assignment 
+
+# load in packages
+library(tidyverse)
+library(DBI)
+library(ggplot2)
+library(ggridges)
+library(patchwork)
+library(lubridate)
+
+# Load in Data 
+dragons_db <- dbConnect(RSQLite::SQLite(),
+                        "dragons(RStudio).db")
+
+# load in all tables ####
+dragons <- dbGetQuery(dragons_db, "SELECT * FROM dragons;")
+captures <- dbGetQuery(dragons_db, "SELECT * FROM captures;")
+capture_sites <- dbGetQuery(dragons_db, "SELECT * FROM capture_sites;")
+morphometrics <- dbGetQuery(dragons_db, "SELECT * FROM morphometrics;")
+diet <- dbGetQuery(dragons_db, "SELECT * FROM diet;")
+tags <- dbGetQuery(dragons_db, "SELECT * FROM tags;")
+deployments <- dbGetQuery(dragons_db, "SELECT * FROM deployments;")
+telemetry <- dbGetQuery(dragons_db, "SELECT * FROM gps_data;")
+
+# Plot 1 ####
+
+# Make a barplot showing how many tags were deployed on dragons at each capture 
+# site. Each capture site should be filled with a different color. Theme used: 
+# light. Axis labels, legend title, and plot title should appear as shown. 
+plot_1 <- deployments %>% 
+  left_join(tags, by = "tag_id") %>% 
+  left_join(captures, by = "dragon_id") %>% 
+  distinct() %>% 
+  count(site) %>% 
+  ggplot(aes(x = site, 
+             y = n,
+             fill = site)) +
+  geom_bar(stat = "identity") + 
+  labs(x = "", y = "Count", title = "Tags Deployed by Site",
+       color = "Capture Site") +
+  theme_light()
+
+plot_1
+
+# Plot 2 ####
+
+# I ran a regression modeling wingspan of adult and subadult dragons as a 
+# function of tarsus length and age class. Run the following code to get a 
+# data frame of the mean model predictions plus confidence intervals: 
+
+reg_data <- morphometrics %>% 
+  left_join(dragons) %>% 
+  filter(age_class %in% c("Subadult", "Adult"))
+
+reg <- lm(formula = wingspan_cm ~ tarsus_length_cm + age_class, data = reg_data)
+
+pred <- predict(reg, se.fit = TRUE)
+
+preds <- data.frame(mean = pred$fit,
+                    upr = pred$fit + 1.96 * pred$se.fit,
+                    lwr = pred$fit - 1.96 * pred$se.fit,
+                    age = reg_data$age_class)
+
+# Now make a plot of wingspan as a function of tarsus length broken down by age.
+# Plot the regression line, the confidence intervals ribbon, and the raw points
+# (hint: make sure you add the layers to the plot in the right order!) 
+# Data and regression line should be in different colors for the two age classes.
+# The ribbon should be light gray (use gray90). The legend should appear at the 
+# bottom. Theme used: light. Axis labels, legend title, and plot title should 
+# appear as shown.
+
+# Attempt 1
+coefs <- preds$coefficients
+
+plot_2 <- morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  filter(age_class %in% c("Adult", "Subdadult")) %>% 
+  mutate(age_class = factor(age_class, levels = c("Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(aes(x = tarsus_length_cm, 
+             y = wingspan_cm,
+             color = age_class)) + 
+  geom_ribbon(aes(ymin = preds$lwr, ymax = preds$upr), fill = "gray90") +
+  geom_line(aes(y = preds$mean, size = 0.5)) +
+  geom_point() +
+  labs(x = "Tarsus Length (cm)", y = "Wingspan (cm)",
+       color = "Age Class", title = "relationship between tarsus length and wingspan") +
+  scale_color_discrete(labels = c("Subadult (> 1 and < 3 years)",
+                                  "Adult (> 3 years)")) +
+  theme_light() +
+  theme(legend.position = "bottom")
+
+# Attempt 2:
+plot_2 <- morphometrics %>% 
+  left_join(dragons, by = "dragon_id") %>% 
+  filter(age_class %in% c("Adult", "Subdadult")) %>% 
+  mutate(age_class = factor(age_class, levels = c("Subadult",
+                                                  "Adult"))) %>% 
+  ggplot(data = reg_data, mapping = aes(x = tarsus_length_cm, y = wingspan_cm, 
+                                      color = age_class)) +
+  geom_ribbon(aes(ymin = preds$lwr, ymax = preds$upr), 
+              fill = "gray90") +
+  geom_line(aes(y=preds$mean))+
+  geom_point() +
+  labs(title = "Relationship between wingspan and tarsus length", 
+       x = "Tarsus Length (cm)", y = "Wingspan (cm)", color = "Age class") +
+  theme_light() + 
+  theme(legend.position = "bottom")
+
+plot_2
+
+# Plot 3 ####
+
+# Make a boxplot of dragon total body length broken down by capture site. 
+# Include only adults and subadults. Overlay the raw data points to each boxplot 
+# (hint: check out geom_jitter()!). Add transparency to the points (value 0.5).
+# Each boxplot and its corresponding points should be a different color. Legend 
+# should be on the bottom. Axis labels and plot legend title should be as shown. 
+# Theme used: black and white.
+
+plot_3 <- dragons %>%
+  as_tibble() %>%
+  left_join(morphometrics, by = "dragon_id") %>%
+  left_join(captures, by = "dragon_id") %>%
+  mutate(age_class = factor(age_class, levels = c("Subadult","Adult"))) %>%
+  filter(!is.na(age_class)) %>%
+  filter(!is.na(total_body_length_cm)) %>%
+  select(total_body_length_cm, site) %>%
+  ggplot(aes(x=site, y=total_body_length_cm)) +
+  geom_boxplot(aes(color = site)) +
+  labs(y = "Total body length (cm)") +
+  geom_jitter(aes(color = site), alpha=0.5) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+plot_3
+
+# Plot 4 ####
+
+# For dragons that were GPS-tracked, calculate how long the monitoring period was
+# for each individual (in days) using lubridate. Then, make a density plot of 
+# GPS-tracking period durations broken down by age class where each density line 
+# appears staggered (hint: check out ggridges::geom_density_ridges; use scale = 8).
+# Make sure the age_class factor is ordered from Adult to Juvenile. Each density 
+# curve should be filled with a different color. Legend should not appear. Axis 
+# labels should be as shown. Theme used: minimal.
+
+plot_4 <- dragons %>%
+  left_join(telemetry, by = "dragon_id") %>%
+  group_by(dragon_id) %>%
+  mutate(timestamp = (ymd_hms(timestamp))) %>%
+  mutate(start = min(timestamp), stop = max(timestamp), 
+         duration = as.numeric(difftime(max(timestamp), min(timestamp), 
+                                        units= "days"))) %>%
+  distinct(dragon_id, duration, .keep_all=TRUE) %>%
+  mutate(age_class=factor(age_class, 
+                          levels =c("Adult", "Subadult", "Juvenile"))) %>%
+  
+  ggplot(aes(x = duration, y = age_class, fill = age_class)) +
+  ggridges::geom_density_ridges(scale = 8, show.legend = FALSE) +
+  labs(x = "Duration of monitoring period (days)", y = "Age Class") +
+  theme_minimal()
+
+plot_4
+
+# Plot 5 ####
+
+plot_5 <- dragons %>%
+  left_join(morphometrics) %>%
+  select(age_class, tarsus_length_cm, tail_length_cm, total_body_length_cm) %>%
+  filter(age_class == "Adult") %>%
+  ggplot(aes(x = tarsus_length_cm, y = tail_length_cm, 
+             color = total_body_length_cm, size = total_body_length_cm)) +
+  geom_point() +
+  labs(x = "Tarsus length (cm)", y = "Tail length (cm)", 
+       color = "Total body length (cm)") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  guides(color = "legend", size = "legend")
+
+plot_5
+
+# cannot figure out how to remove the other legend
+
+# Make a scatterplot of tail length as a function of tarsus length using data for
+# adult dragons only. Give the points different colors and sizes according to 
+# total body length. Make sure you get only one legend in output (hint: check 
+# out this StackOverflow post: 
+# https://stackoverflow.com/questions/32649426/ggplot-combining-size-and-color-in-legend#:~:text=ggplot2%20can%20indeed%20combine%20size,they%20can%20not%20be%20combined.)).
+# Legend should appear at the bottom. Axis labels should be as shown. Theme 
+# used: minimal.
+
+# Plot 6 ####
+
+# Combine the three plots above in a patchwork where the first two appear 
+# side-by-side at the bottom (with the boxplot on the left) and the third one on
+# the top. Use the viridis magma palette for all of them.
+
+Plot_5 <- dragons %>%
+  left_join(morphometrics) %>%
+  select(age_class, tarsus_length_cm, tail_length_cm, total_body_length_cm) %>%
+  filter(age_class == "Adult") %>%
+  ggplot(aes(x = tarsus_length_cm, y = tail_length_cm, 
+             color = total_body_length_cm, size = total_body_length_cm)) +
+  geom_point() +
+  labs(x = "Tarsus length (cm)", y = "Tail length (cm)", 
+       color = "Total body length (cm)") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  guides(color = "legend", size = "legend") +
+  scale_color_viridis_c(option="magma")
+
+Plot_3 <- dragons %>%
+  as_tibble() %>%
+  left_join(morphometrics, by = "dragon_id") %>%
+  left_join(captures, by = "dragon_id") %>%
+  mutate(age_class = factor(age_class, levels = c("Subadult","Adult"))) %>%
+  filter(!is.na(age_class)) %>%
+  filter(!is.na(total_body_length_cm)) %>%
+  select(total_body_length_cm, site) %>%
+  ggplot(aes(x=site, y=total_body_length_cm)) +
+  geom_boxplot(aes(color = site)) +
+  labs(y = "Total body length (cm)") +
+  geom_jitter(aes(color = site), alpha=0.5) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  scale_color_viridis_d(option="magma")
+
+
+Plot_4 <- dragons %>%
+  left_join(telemetry, by = "dragon_id") %>%
+  group_by(dragon_id) %>%
+  mutate(timestamp = (ymd_hms(timestamp))) %>%
+  mutate(start = min(timestamp), stop = max(timestamp), 
+         duration = as.numeric(difftime(max(timestamp), min(timestamp), 
+                                        units= "days"))) %>%
+  distinct(dragon_id, duration, .keep_all=TRUE) %>%
+  mutate(age_class=factor(age_class, 
+                          levels =c("Adult", "Subadult", "Juvenile"))) %>%
+  
+  ggplot(aes(x = duration, y = age_class, fill = age_class)) +
+  ggridges::geom_density_ridges(scale = 8, show.legend = FALSE) +
+  labs(x = "Duration of monitoring period (days)", y = "Age Class") +
+  theme_minimal() +
+  scale_fill_viridis_d(option="magma")
+
+Plot_5 / (Plot_3 | Plot_4)

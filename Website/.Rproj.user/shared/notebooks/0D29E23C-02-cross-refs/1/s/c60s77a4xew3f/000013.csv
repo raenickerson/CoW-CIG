@@ -1,0 +1,5 @@
+"0","WAP <- read.csv(""WA_DM_Final"", na = ""NA"")
+"
+"2","Warning: cannot open file 'WA_DM_Final': No such file or directory"
+"2","Error in file(file, ""rt"") : cannot open the connection
+"

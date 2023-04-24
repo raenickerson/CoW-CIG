@@ -1,0 +1,1 @@
+"0","dbGetQuery(cow_cig_db, ""SELECT * FROM WA_DM_F LIMIT 20;"")"

@@ -1,0 +1,12 @@
+h1:about About
+h1:creating-my-database Creating My Database
+fig:diagram Diagram Illustrating the Structure of the Database
+h2:starting-the-databse Starting the Databse
+h2:creating-the-database-connection-to-my-sqlite-database Creating the database connection to my SQLite database
+h2:creating-the-cameras-table Creating the cameras table
+h2:creating-the-photos-table Creating the photos table
+h2:creating-the-wa_dm-table-pilot-data Creating the WA_DM table (pilot data)
+h1:brining-in-and-cleaning-my-data Brining in, and cleaning my data
+h2:brining-in-the-pilot-data Brining in the pilot data
+h2:cleaning-the-data Cleaning the data
+

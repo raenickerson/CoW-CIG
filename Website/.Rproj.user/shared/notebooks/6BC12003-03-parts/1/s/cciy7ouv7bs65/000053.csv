@@ -1,0 +1,23 @@
+"0","plot <- S_O %>%
+  select(species_id, cam_id, num_individ_pics) %>%
+  filter(species_id %in% c(""Cougar"", ""Black Bear"", ""Lynx"", ""Coyote"")) %>% 
+  mutate(cam_id = factor(cam_id, levels = c(""7196-12"",""7196-5"", ""7196-12"",
+                                            ""4186-13"", ""4186-17"", ""7196-11"",
+                                            ""4186-20"", ""9164"", ""7196-2"",
+                                            ""7196-4"", ""7196-6""))) %>%
+  group_by(species_id, cam_id) %>%
+  ggplot(aes(x=species_id, y=num_individ_pics)) +
+  geom_bar(stat = ""identity"", fill = ""cyan"") +
+  labs(y = ""Total Number of Individuals"", x = ""Predator Species"") +
+  ggtitle(""Predator Presence at Camera X"") +
+  theme_bw() +
+  theme(legend.position = ""bottom"")
+"
+"1","[1m[33mError[39m in `mutate()`:[22m
+[38;5;232m[33m![38;5;232m Problem while computing `cam_id = factor(...)`.[39m
+[1mCaused by error in `levels<-`:[22m
+[33m![39m factor level [3] is duplicated
+Backtrace:
+[90m 1. [39m... %>% ggplot(aes(x = species_id, y = num_individ_pics))
+[90m 9. [39m[1mbase[22m::factor(...)
+"

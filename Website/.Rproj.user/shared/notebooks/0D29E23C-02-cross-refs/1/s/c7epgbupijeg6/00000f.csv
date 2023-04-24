@@ -1,0 +1,3 @@
+"0","S_O$station_id <- as.factor(S_O$station_id)"
+"0","S_O$cam_id <- as.factor(S_O$cam_id)"
+"0","S_O$species_id <- as.factor(S_O$species_id)"
