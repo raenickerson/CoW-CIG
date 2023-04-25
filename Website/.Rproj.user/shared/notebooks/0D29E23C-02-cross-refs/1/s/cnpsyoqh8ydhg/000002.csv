@@ -1,0 +1,4 @@
+"0","# species occurrence table"
+"0",""
+"0","S_O <- WAP %>% "
+"0","  select(date_pic, cam_id, station_id, species_id, num_individ_pics)"

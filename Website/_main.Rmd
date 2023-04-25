@@ -52,16 +52,18 @@ across tables.
 ## Starting the Databse {-}
 
 I'll start by loading the `DBI` and `RSQLite` packages:
-```{r pkg, eval = TRUE, echo = TRUE, warning = FALSE, message = FALSE, error = FALSE}
+```{r pkg, eval = FALSE, echo = FALSE, warning = FALSE, message = FALSE, error = FALSE}
 library(DBI)
 library(RSQLite)
 library(ggplot2)
+library(tidyverse)
 library(dplyr)
+library(lubridate)
 ```
 
 ## Creating the database connection to my SQLite database {-}
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r connection, eval = FALSE, echo = TRUE}
 cow_cig_db <- dbConnect(RSQLite::SQLite(), 
                     "CoW_CIG.db")
 ```
@@ -188,21 +190,21 @@ dbGetQuery(cow_cig_db, "SELECT * FROM photos LIMIT 20;")
 
 This table includes all information about deployed cameras at our pilot field site in Washington from the summer of 2021, including photo id, date, camera model, camera id, station id, species, number of individuals, and number of individuals per photo event. The `photo_id` column contains a unique identifier, and as such, is the primary key of the table.
 
-```{r cameras-table, eval = FALSE, echo = TRUE}
+```{r pilot-table, eval = FALSE, echo = TRUE}
 dbExecute(cow_cig_db, "CREATE TABLE WA_DM_F (
                           photo_id integer PRIMARY KEY AUTOINCREMENT,
                           date_pic text,
                           cam_model varchar(10), 
                           cam_id varchar(10),
                           station_id varchar(10),
-                          species_id varchar(10),
+                          species_id varchar(20),
                           num char(20),
                           num_individ_pics char(20)
                           );")
 ```
 
-Preview of the photos table:
-```{r show-photos, eval = TRUE, echo = FALSE}
+Preview of the pilot table:
+```{r show-pilot, eval = TRUE, echo = TRUE}
 dbGetQuery(cow_cig_db, "SELECT * FROM WA_DM_F LIMIT 20;")
 ```
 
@@ -216,34 +218,32 @@ This pilot was in eastern Washington (just outside Colville) and focused on comp
 
 ## Brining in the pilot data
 
-```{r connection, eval = TRUE, echo = TRUE}
-library(tidyverse)
+```{r data drop, eval = TRUE, echo = TRUE}
 WAP <- dbGetQuery(cow_cig_db, "SELECT * FROM WA_DM_F;")
 ```
 
 Alternative way to bring in the data: 
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r csv_connection, eval = TRUE, echo = TRUE}
 WAP <- read.csv("WA_DM_Final.csv", na = "NA")
 ```
 
 ## Cleaning the data
 
-For some reason, R is reading in my csv file to have 99+ variables. So first I will remove all unneeded columns to just have the data I will be working with for visualization later. 
+For some reason, R is reading in my csv file to have 99+ variables. So first I will remove all unneeded columns to just have the data collected, focusing on what might be useful later for data visulization.
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r data, eval = TRUE, echo = TRUE}
 # species occurrence table
+
 S_O <- WAP %>% 
   select(date_pic, cam_id, station_id, species_id, num_individ_pics)
 ```
 
-Notice that I selected the "num_individ_pics" column over the "num" column. This is because the "num" column records the number of individuals per photo, regardless of whether those same individuals show up more than once in a series of pictures. To better reflect presence, we will use the "num_individ_pics" columns which has been cleaned to only have one value per individual, per photo event. 
+Notice that I selected the "num_individ_pics" column over the "num" column. This is because the "num_individ_pics" column show the number of individuals of a certain species per photo. For ranchers worried about predator pesence, knowing how many animals are around is important. 
 
 Now let's make sure our date column is being read correctly by R using Lubridate
 
-```{r connection, eval = TRUE, echo = TRUE}
-library(lubridate)
-
+```{r date, eval = TRUE, echo = TRUE}
 S_O <- S_O %>% 
   mutate(date_pic = ymd(date_pic))
 class(S_O$date_pic)
@@ -253,7 +253,7 @@ Next, let's make sure all NA's, UNKNONWS, and ?s are set to NA, and make sure ou
 
 First, let's check the class for each column (except date_pic which we've already dealt with)
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r class, eval = TRUE, echo = TRUE}
 class(S_O$cam_id)
 class(S_O$station_id)
 class(S_O$species_id)
@@ -262,7 +262,7 @@ class(S_O$num_individ_pics)
 
 Our num_individ_pics is the integar class, which is good, but our other variables need to be switched to as.factor so that we can categorize by cam_id, station_id, and species_id. 
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r slice, eval = TRUE, echo = TRUE}
 S_O$station_id <- as.factor(S_O$station_id)
 S_O$cam_id <- as.factor(S_O$cam_id)
 S_O$species_id <- as.factor(S_O$species_id)
@@ -270,7 +270,7 @@ S_O$species_id <- as.factor(S_O$species_id)
 
 Now, let's check that it worked
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r check, eval = TRUE, echo = TRUE}
 class(S_O$station_id)
 class(S_O$species_id)
 class(S_O$cam_id)
@@ -278,119 +278,144 @@ class(S_O$cam_id)
 
 Next, let's standardize all the different ways that species were written using tidyverse. 
 
-```{r connection, eval = TRUE, echo = TRUE}
+```{r preds, eval = TRUE, echo = TRUE}
 S_O %>% 
   pull(species_id) %>% 
   unique()
 ```
-As you can see, we have a bit of a mess here. So the first thing we want to do is separate the information we need from the information we don't. For example, we are only going to look at predator presence, so all other categories can be ignored (we will select for predator later). But, we need to set all versions of predators to a consistent category - predator - which includes BB (black bear), coyote, Coyote, COYOTE, mountain lion, and Mountain Lion. 
+As you can see, we have a bit of a mess here. So the first thing we want to do is separate the information we need from the information we don't. For example, we are only going to look at predator presence, so all other categories can be ignored (we will select for only predators later). But, we need to set all versions of predators to consistent naming - which includes BB (black bear), Lynx, coyote, Coyote, COYOTE, mountain lion, and Mountain Lion. 
 
-```{r connection, eval = TRUE, echo = TRUE}
+First, will need to convert back to character, then set standard naming
 
+```{r standard, eval = TRUE, echo = TRUE}
+S_O$species_id <- as.character(S_O$species_id)
+
+S_O <- S_O %>% 
+  mutate(species_id = if_else(species_id == "mountain lion", "Cougar", species_id)) %>% 
+  mutate(species_id = if_else(species_id == "Mountain Lion", "Cougar", species_id)) %>% 
+  mutate(species_id = if_else(species_id == "lion", "Cougar", species_id)) %>% 
+  mutate(species_id = if_else(species_id == "COYOTE", "Coyote", species_id)) %>% 
+  mutate(species_id = if_else(species_id == "coyote", "Coyote", species_id)) %>% 
+  mutate(species_id = if_else(species_id == "BB", "Black Bear", species_id))
 ```
 
+Now let's change it back to factor, and check that it worked.
 
-S_O <- ifelse$species_id(S_O$species_id == "UNKNOWN", NA, S_O$species_id)
-S_O
+```{r preds-check, eval = TRUE, echo = TRUE}
+S_O$species_id <- as.factor(S_O$species_id)
+
+S_O %>% 
+  pull(species_id) %>% 
+  unique()
 ```
+Excellent!
+
+Now, let's check for distinct values in our other columns just to make sure there are no errors - specifically cam_id and num_individ_pics since we will be using those columns to visualize our predator presence across camera sites. 
+```{r distinct, eval = TRUE, echo = TRUE}
+S_O %>% 
+  pull(cam_id) %>% 
+  unique()
+```
+
+Looks like we have 12 different cameras, which means our other 8 cameras did not get photos of any animals at all (sad)
+
+Let's do the same for the num_individ_pics columns
+
+```{r second, eval = TRUE, echo = TRUE}
+S_O %>% 
+  pull(num_individ_pics) %>% 
+  unique()
+```
+
+Looks like we have some NA values. To simplify our analysis, I'm going to remove any rows/values/observations with NA as the response. 
+
+```{r NA, eval = TRUE, echo = TRUE}
+S_O <- S_O %>%
+  filter(!is.na(num_individ_pics))
+```
+
+Great! Now our data is clean enough to start plotting - we have our predator species categorized cleanly into four species - Lynx, Cougar, Black Bear, and Coyote, our columns no longer contain missing data, and are the correct class. 
 
 <!--chapter:end:02-cross-refs.Rmd-->
 
 # Visualizing the data
 
 Now that the data is cleaned, I'd like to use tidyverse (including ggplot)
-to visualize my data. Specifically, I'd like to look at how predator presence varies across camera sites. Unfortunately, we did not capture enough wolf activity to look at just wolves, so we will look at wolves, bears, lions, bobcats, lynx, and coyotes as one "predator" category. 
+to visualize my data. Specifically, I'd like to look at how predator presence varies across camera sites.
 
-First, let's create a new column where all the above listed species are changed to "predator".
+First, I'll select the columns I want to use, filter out only the predator species, then design my box plots. I will run them in 3 rounds so that the plot is not over crowded.
 
+```{r ggplot, eval = TRUE, echo = TRUE}
+plot1 <- S_O %>%
+  select(species_id, cam_id, num_individ_pics) %>%
+  filter(cam_id %in% c("7196-12","7196-5", "7196-12", "4186-13")) %>%
+  filter(species_id %in% c("Cougar", "Black Bear", "Lynx", "Coyote")) %>% 
+  group_by(species_id, cam_id) %>%
+  ggplot(aes(x=species_id, y=num_individ_pics)) +
+  geom_bar(stat = "identity", fill = "cyan") +
+  facet_wrap(~ cam_id, nrow = 1) +
+  labs(y = "Total Number of Individuals", x = "Predator Species") +
+  ggtitle("Predator Presence at Washington Camera Locations") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(legend.position = "bottom")
 
+plot1
+```
 
+Round 2
+
+```{r 2gg, eval = TRUE, echo = TRUE}
+plot2 <- S_O %>%
+  select(species_id, cam_id, num_individ_pics) %>%
+  filter(cam_id %in% c("4186-17", "7196-11", "4186-20", "9164")) %>%
+  filter(species_id %in% c("Cougar", "Black Bear", "Lynx", "Coyote")) %>% 
+  group_by(species_id, cam_id) %>%
+  ggplot(aes(x=species_id, y=num_individ_pics)) +
+  geom_bar(stat = "identity", fill = "cyan") +
+  facet_wrap(~ cam_id, nrow = 1) +
+  labs(y = "Total Number of Individuals", x = "Predator Species") +
+  ggtitle("Predator Presence at Washington Camera Locations") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(legend.position = "bottom")
+
+plot2
+```
+
+Round 3
+
+```{r 3gg, eval = TRUE, echo = TRUE}
+plot3 <- S_O %>%
+  select(species_id, cam_id, num_individ_pics) %>%
+  filter(cam_id %in% c("7196-2", "7196-4", "7196-6")) %>%
+  filter(species_id %in% c("Cougar", "Black Bear", "Lynx", "Coyote")) %>% 
+  group_by(species_id, cam_id) %>%
+  ggplot(aes(x=species_id, y=num_individ_pics)) +
+  geom_bar(stat = "identity", fill = "cyan") +
+  facet_wrap(~ cam_id, nrow = 1) +
+  labs(y = "Total Number of Individuals", x = "Predator Species") +
+  ggtitle("Predator Presence at Washington Camera Locations") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(legend.position = "bottom")
+
+plot3
+```
+
+And we now get a beautiful series of bar plots showing how predator presence changes across camera locations. 
+
+## THE END! Thanks for a wonderful class, Simona, probably the most helpful graduate course I've ever taken. Good luck in Idaho! We will miss you.
 
 
 
 <!--chapter:end:03-parts.Rmd-->
 
-# Footnotes and citations 
-
-## Footnotes
-
-Footnotes are put inside the square brackets after a caret `^[]`. Like this one ^[This is a footnote.]. 
-
-## Citations
-
-Reference items in your bibliography file(s) using `@key`.
-
-For example, we are using the **bookdown** package [@R-bookdown] (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and **knitr** [@xie2015] (this citation was added manually in an external file book.bib). 
-Note that the `.bib` files need to be listed in the index.Rmd with the YAML `bibliography` key.
-
-
-The RStudio Visual Markdown Editor can also make it easier to insert citations: <https://rstudio.github.io/visual-markdown-editing/#/citations>
 
 <!--chapter:end:04-citations.Rmd-->
 
-# Blocks
-
-## Equations
-
-Here is an equation.
-
-\begin{equation} 
-  f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
-  (\#eq:binom)
-\end{equation} 
-
-You may refer to using `\@ref(eq:binom)`, like see Equation \@ref(eq:binom).
-
-
-## Theorems and proofs
-
-Labeled theorems can be referenced in text using `\@ref(thm:tri)`, for example, check out this smart theorem \@ref(thm:tri).
-
-::: {.theorem #tri}
-For a right triangle, if $c$ denotes the *length* of the hypotenuse
-and $a$ and $b$ denote the lengths of the **other** two sides, we have
-$$a^2 + b^2 = c^2$$
-:::
-
-Read more here <https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html>.
-
-## Callout blocks
-
-
-The R Markdown Cookbook provides more help on how to use custom blocks to design your own callouts: https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html
 
 <!--chapter:end:05-blocks.Rmd-->
-
-# Sharing your book
-
-## Publishing
-
-HTML books can be published online, see: https://bookdown.org/yihui/bookdown/publishing.html
-
-## 404 pages
-
-By default, users will be directed to a 404 page if they try to access a webpage that cannot be found. If you'd like to customize your 404 page instead of using the default, you may add either a `_404.Rmd` or `_404.md` file to your project root and use code and/or Markdown syntax.
-
-## Metadata for sharing
-
-Bookdown HTML books will provide HTML metadata for social sharing on platforms like Twitter, Facebook, and LinkedIn, using information you provide in the `index.Rmd` YAML. To setup, set the `url` for your book and the path to your `cover-image` file. Your book's `title` and `description` are also used.
-
-
-
-This `gitbook` uses the same social sharing data across all chapters in your book- all links shared will look the same.
-
-Specify your book's source repository on GitHub using the `edit` key under the configuration options in the `_output.yml` file, which allows users to suggest an edit by linking to a chapter's source file. 
-
-Read more about the features of this output format here:
-
-https://pkgs.rstudio.com/bookdown/reference/gitbook.html
-
-Or use:
-
-```{r eval=FALSE}
-?bookdown::gitbook
-```
-
 
 
 <!--chapter:end:06-share.Rmd-->

@@ -1,5 +1,0 @@
-"0","WAP <- dbGetQuery(CoW_CIG, ""SELECT * FROM WA_DM_F;"")
-"
-"2","Error in h(simpleError(msg, call)) : 
-  error in evaluating the argument 'conn' in selecting a method for function 'dbGetQuery': object 'CoW_CIG' not found
-"

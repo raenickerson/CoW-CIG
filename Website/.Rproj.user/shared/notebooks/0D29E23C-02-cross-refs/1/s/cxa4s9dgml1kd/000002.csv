@@ -1,0 +1,7 @@
+"0","S_O <- S_O %>% "
+"0","  mutate(date_pic = ymd(date_pic))"
+"0","class(S_O$date_pic)"
+"1","[1]"
+"1"," ""Date"""
+"1","
+"

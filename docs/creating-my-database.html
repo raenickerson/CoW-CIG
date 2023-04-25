@@ -26,7 +26,7 @@ organizing of my data for the CoW-CIG.</p>" />
 <meta name="author" content="Rae Nickerson" />
 
 
-<meta name="date" content="2023-04-21" />
+<meta name="date" content="2023-04-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -34,7 +34,7 @@ organizing of my data for the CoW-CIG.</p>" />
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="cross.html"/>
+<link rel="next" href="brining-in-and-cleaning-my-data.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -122,28 +122,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -168,29 +146,16 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-database-connection-to-my-sqlite-database"><i class="fa fa-check"></i>Creating the database connection to my SQLite database</a></li>
 <li class="chapter" data-level="2.1" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-cameras-table"><i class="fa fa-check"></i><b>2.1</b> Creating the cameras table</a></li>
 <li class="chapter" data-level="2.2" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-photos-table"><i class="fa fa-check"></i><b>2.2</b> Creating the photos table</a></li>
+<li class="chapter" data-level="2.3" data-path="creating-my-database.html"><a href="creating-my-database.html#creating-the-wa_dm-table-pilot-data"><i class="fa fa-check"></i><b>2.3</b> Creating the WA_DM table (pilot data)</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Cross-references</a>
+<li class="chapter" data-level="3" data-path="brining-in-and-cleaning-my-data.html"><a href="brining-in-and-cleaning-my-data.html"><i class="fa fa-check"></i><b>3</b> Brining in, and cleaning my data</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#chapters-and-sub-chapters"><i class="fa fa-check"></i><b>3.1</b> Chapters and sub-chapters</a></li>
-<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#captioned-figures-and-tables"><i class="fa fa-check"></i><b>3.2</b> Captioned figures and tables</a></li>
+<li class="chapter" data-level="3.1" data-path="brining-in-and-cleaning-my-data.html"><a href="brining-in-and-cleaning-my-data.html#brining-in-the-pilot-data"><i class="fa fa-check"></i><b>3.1</b> Brining in the pilot data</a></li>
+<li class="chapter" data-level="3.2" data-path="brining-in-and-cleaning-my-data.html"><a href="brining-in-and-cleaning-my-data.html#cleaning-the-data"><i class="fa fa-check"></i><b>3.2</b> Cleaning the data</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="parts.html"><a href="parts.html"><i class="fa fa-check"></i><b>4</b> Parts</a></li>
-<li class="chapter" data-level="5" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>5</b> Footnotes and citations</a>
+<li class="chapter" data-level="4" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html"><i class="fa fa-check"></i><b>4</b> Visualizing the data</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>5.1</b> Footnotes</a></li>
-<li class="chapter" data-level="5.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>5.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>6</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>6.1</b> Equations</a></li>
-<li class="chapter" data-level="6.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>6.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="6.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>6.3</b> Callout blocks</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="sharing-your-book.html"><a href="sharing-your-book.html"><i class="fa fa-check"></i><b>7</b> Sharing your book</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="sharing-your-book.html"><a href="sharing-your-book.html#publishing"><i class="fa fa-check"></i><b>7.1</b> Publishing</a></li>
-<li class="chapter" data-level="7.2" data-path="sharing-your-book.html"><a href="sharing-your-book.html#pages"><i class="fa fa-check"></i><b>7.2</b> 404 pages</a></li>
-<li class="chapter" data-level="7.3" data-path="sharing-your-book.html"><a href="sharing-your-book.html#metadata-for-sharing"><i class="fa fa-check"></i><b>7.3</b> Metadata for sharing</a></li>
+<li class="chapter" data-level="4.1" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#the-end-thanks-for-a-wonderful-class-simona-probably-the-most-helpful-graduate-course-ive-ever-taken.-good-luck-in-idaho-we-will-miss-you."><i class="fa fa-check"></i><b>4.1</b> THE END! Thanks for a wonderful class, Simona, probably the most helpful graduate course I’ve ever taken. Good luck in Idaho! We will miss you.</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -226,7 +191,7 @@ Figure 2.1: Diagram Illustrating the Structure of the Database
 </p>
 </div>
 <p>Unfortunately, I will only have camera data from our pilot to analyze at this time, so I will
-be focusing on the tables Cameras and Photos. Colored lines represent variables shared
+be focusing on a new table I created just for this task (not listed here in this database). However, when analyzing our actual data, I will be using the tables Cameras, Photos, Rides, and Predator_Agency to consolidate all predator data for a single season, by location. Colored lines represent variables shared
 across tables.</p>
 <div id="starting-the-databse" class="section level2 unnumbered hasAnchor">
 <h2>Starting the Databse<a href="creating-my-database.html#starting-the-databse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -234,7 +199,8 @@ across tables.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="creating-my-database.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
 <span id="cb1-2"><a href="creating-my-database.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span>
 <span id="cb1-3"><a href="creating-my-database.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="creating-my-database.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<span id="cb1-4"><a href="creating-my-database.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-5"><a href="creating-my-database.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
 </div>
 <div id="creating-the-database-connection-to-my-sqlite-database" class="section level2 unnumbered hasAnchor">
 <h2>Creating the database connection to my SQLite database<a href="creating-my-database.html#creating-the-database-connection-to-my-sqlite-database" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -362,6 +328,63 @@ across tables.</p>
 ## [41] lying_calves      running_bulls     running_cows      running_calves   
 ## [45] other_bulls       other_cows        other_calves      dom_behav        
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+<div id="creating-the-wa_dm-table-pilot-data" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Creating the WA_DM table (pilot data)<a href="creating-my-database.html#creating-the-wa_dm-table-pilot-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This table includes all information about deployed cameras at our pilot field site in Washington from the summer of 2021, including photo id, date, camera model, camera id, station id, species, number of individuals, and number of individuals per photo event. The <code>photo_id</code> column contains a unique identifier, and as such, is the primary key of the table.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="creating-my-database.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(cow_cig_db, <span class="st">&quot;CREATE TABLE WA_DM_F (</span></span>
+<span id="cb7-2"><a href="creating-my-database.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">                          photo_id integer PRIMARY KEY AUTOINCREMENT,</span></span>
+<span id="cb7-3"><a href="creating-my-database.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">                          date_pic text,</span></span>
+<span id="cb7-4"><a href="creating-my-database.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">                          cam_model varchar(10), </span></span>
+<span id="cb7-5"><a href="creating-my-database.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">                          cam_id varchar(10),</span></span>
+<span id="cb7-6"><a href="creating-my-database.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">                          station_id varchar(10),</span></span>
+<span id="cb7-7"><a href="creating-my-database.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">                          species_id varchar(20),</span></span>
+<span id="cb7-8"><a href="creating-my-database.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">                          num char(20),</span></span>
+<span id="cb7-9"><a href="creating-my-database.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">                          num_individ_pics char(20)</span></span>
+<span id="cb7-10"><a href="creating-my-database.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">                          );&quot;</span>)</span></code></pre></div>
+<p>Preview of the pilot table:</p>
+<pre><code>##    photo_id date_pic cam_model   cam_id station_id species_id       num
+## 1         1        1   29/7/21 Browning    7196-12  CTWABD01B   UNKNOWN
+## 2         2        2   30/7/21 Browning    7196-12  CTWABD01B   UNKNOWN
+## 3         3        3   30/7/21 Browning    7196-12  CTWABD01B    Coyote
+## 4         4        4    4/8/21 Browning    7196-12  CTWABD01B  squirrel
+## 5         5        5    6/8/21 Browning    7196-12  CTWABD01B    Coyote
+## 6         6        6    6/8/21 Browning    7196-12  CTWABD01B  squirrel
+## 7         7        7    7/8/21 Browning    7196-12  CTWABD01B    Coyote
+## 8         8        8   14/8/21 Browning    7196-12  CTWABD01B        BB
+## 9         9        9   15/8/21 Browning    7196-12  CTWABD01B    Grouse
+## 10       10       10   16/8/21 Browning    7196-12  CTWABD01B Lagomorph
+## 11       11       11   16/8/21 Browning    7196-12  CTWABD01B    Grouse
+## 12       12       12   16/8/21 Browning    7196-12  CTWABD01B        BB
+## 13       13       13   16/8/21 Browning    7196-12  CTWABD01B        BB
+## 14       14       14   18/8/21 Browning    7196-12  CTWABD01B      Deer
+## 15       15       15   18/8/21 Browning    7196-12  CTWABD01B        BB
+## 16       16       16   20/8/21 Browning    7196-12  CTWABD01B Lagomorph
+## 17       17       17   21/8/21 Browning    7196-12  CTWABD01B        BB
+## 18       18       18   21/8/21 Browning    7196-12  CTWABD01B     Moose
+## 19       19       19   22/8/21 Browning    7196-12  CTWABD01B        BB
+## 20       20       20   23/8/21 Browning    7196-12  CTWABD01B    Coyote
+##    num_individ_pics
+## 1                 1
+## 2                 1
+## 3                 1
+## 4                 1
+## 5                 1
+## 6                 1
+## 7                 1
+## 8                 1
+## 9                 1
+## 10                1
+## 11                1
+## 12                1
+## 13                1
+## 14                1
+## 15                1
+## 16                1
+## 17                1
+## 18                1
+## 19                1
+## 20                1</code></pre>
 
 </div>
 </div>
@@ -371,7 +394,7 @@ across tables.</p>
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="cross.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="brining-in-and-cleaning-my-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

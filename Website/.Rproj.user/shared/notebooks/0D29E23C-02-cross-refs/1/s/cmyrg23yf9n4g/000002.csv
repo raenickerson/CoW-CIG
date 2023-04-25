@@ -1,0 +1,3 @@
+"0","WAP <- dbGetQuery(cow_cig_db, ""SELECT * FROM WA_DM_F;"")"
+"2","/bin/sh: data: command not found
+"
