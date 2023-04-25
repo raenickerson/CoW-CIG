@@ -3,7 +3,7 @@
     "path": "~/Desktop/CIG/Analysis/Website/01-database.Rmd",
     "project_path": "01-database.Rmd",
     "type": "r_markdown",
-    "hash": "320142936",
+    "hash": "3175050207",
     "contents": "",
     "dirty": false,
     "created": 1678897053175.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "20,0",
-        "scrollLine": "14"
+        "cursorPosition": "28,0",
+        "scrollLine": "15"
     },
     "folds": "",
-    "lastKnownWriteTime": 1682376251,
+    "lastKnownWriteTime": 1682466619,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1682376435505,
+    "last_content_update": 1682466619066,
     "read_only": false,
     "read_only_alternatives": []
 }

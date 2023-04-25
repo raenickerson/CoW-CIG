@@ -53,12 +53,13 @@ across tables.
 
 I'll start by loading the `DBI` and `RSQLite` packages:
 ```{r pkg, eval = FALSE, echo = FALSE, warning = FALSE, message = FALSE, error = FALSE}
-library(DBI)
 library(RSQLite)
 library(ggplot2)
 library(tidyverse)
 library(dplyr)
 library(lubridate)
+library(RMySQL)
+library(DBI)
 ```
 
 ## Creating the database connection to my SQLite database {-}
@@ -72,7 +73,7 @@ cow_cig_db <- dbConnect(RSQLite::SQLite(),
 
 This table includes all information about deployed cameras at each field site, including camera serial numbers, personnel deployed, total pictures, height, percent cover at location, and more. The `deploy_id` column contains a unique identifier, and as such, is the primary key of the table. All tables in this study are connected by the `ranch_id` variable.
 
-```{r cameras-table, eval = FALSE, echo = TRUE}
+```{r cameras-table, eval = FALSE, echo = FALSE}
 dbExecute(cow_cig_db, "CREATE TABLE cameras (
                           deploy_id integer PRIMARY KEY AUTOINCREMENT,
                           camera_id varchar(10),
@@ -110,7 +111,7 @@ dbExecute(cow_cig_db, "CREATE TABLE cameras (
 
 Preview of the cameras table:
 
-```{r show-cameras, eval = TRUE, echo = FALSE}
+```{r show-cameras, eval = FALSE, echo = FALSE}
 dbGetQuery(cow_cig_db, "SELECT * FROM cameras LIMIT 20;")
 ```
 
@@ -118,7 +119,7 @@ dbGetQuery(cow_cig_db, "SELECT * FROM cameras LIMIT 20;")
 
 This table includes all information related to each individual photo from all game cameras across sites, including observer name, behavior of the cattle in each photo, species, number of individuals, and more. The `photo_id` column contains a unique identifier, and as such, is the primary key of the table.
 
-```{r photos-table, eval = FALSE, echo = TRUE}
+```{r photos-table, eval = FALSE, echo = FALSE}
 dbExecute(cow_cig_db, "CREATE TABLE photos (
                           photo_id integer PRIMARY KEY AUTOINCREMENT,
                           ranch_id varchar(20),
@@ -182,7 +183,7 @@ dbExecute(cow_cig_db, "CREATE TABLE photos (
 ```
 
 Preview of the photos table:
-```{r show-photos, eval = TRUE, echo = FALSE}
+```{r show-photos, eval = FALSE, echo = FALSE}
 dbGetQuery(cow_cig_db, "SELECT * FROM photos LIMIT 20;")
 ```
 
@@ -190,7 +191,7 @@ dbGetQuery(cow_cig_db, "SELECT * FROM photos LIMIT 20;")
 
 This table includes all information about deployed cameras at our pilot field site in Washington from the summer of 2021, including photo id, date, camera model, camera id, station id, species, number of individuals, and number of individuals per photo event. The `photo_id` column contains a unique identifier, and as such, is the primary key of the table.
 
-```{r pilot-table, eval = FALSE, echo = TRUE}
+```{r pilot-table, eval = TRUE, echo = TRUE}
 dbExecute(cow_cig_db, "CREATE TABLE WA_DM_F (
                           photo_id integer PRIMARY KEY AUTOINCREMENT,
                           date_pic text,
@@ -362,6 +363,7 @@ plot1 <- S_O %>%
 
 plot1
 ```
+Since I can't get my book to print my outputs due to an error where base r doesn't want to be overwritten by other packages, I'm going to upload them to my repository separately. Sorry about that. 
 
 Round 2
 

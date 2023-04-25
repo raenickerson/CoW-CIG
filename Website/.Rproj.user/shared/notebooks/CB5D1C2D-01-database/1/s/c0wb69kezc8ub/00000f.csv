@@ -1,0 +1,37 @@
+"0","DBI::dbExecute
+"
+"1","standardGeneric"
+"1",""
+"1"," for """
+"1",""
+"1","dbExecute"
+"1",""
+"1",""" defined from package """
+"1",""
+"1","DBI"
+"1",""
+"1","""
+"
+"1","
+"
+"1","function (conn, statement, ...) 
+"
+"1","standardGeneric(""dbExecute"")
+"
+"1","<bytecode: 0x7f880ea3cf20>
+"
+"1","<environment: 0x7f880ea320e8>
+"
+"1","Methods may be defined for arguments: "
+"1",""
+"1","conn, statement"
+"1",""
+"1","
+"
+"1",""
+"1","Use  showMethods("
+"1",""
+"1","dbExecute"
+"1",""
+"1",")  for currently available ones.
+"

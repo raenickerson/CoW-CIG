@@ -22,6 +22,7 @@ plot1 <- S_O %>%
 
 plot1
 ```
+Since I can't get my book to print my outputs due to an error where base r doesn't want to be overwritten by other packages, I'm going to upload them to my repository separately. Sorry about that. 
 
 Round 2
 
