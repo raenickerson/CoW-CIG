@@ -8,3 +8,4 @@ Data/
 Code/
 *.pdf
 !docs/img/*.PNG
+!Final_Project_Plot_Outputs/*.pdf

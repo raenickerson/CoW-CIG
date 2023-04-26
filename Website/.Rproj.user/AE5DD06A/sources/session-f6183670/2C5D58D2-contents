@@ -22,7 +22,7 @@ plot1 <- S_O %>%
 
 plot1
 ```
-Since I can't get my book to print my outputs due to an error where base r doesn't want to be overwritten by other packages, I'm going to upload them to my repository separately. Sorry about that. 
+Since I can't get my book to print my outputs due to an error where base r doesn't want to be overwritten by other packages, or it tells me that commands from the DBI package don't exist (even though I've updated R, updated all packages, restarted my computer, and scoured the internet) I'm going to upload this r code and output to the repository as well. Sorry about that. 
 
 Round 2
 

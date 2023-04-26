@@ -3,7 +3,7 @@
     "path": "~/Desktop/CIG/Analysis/Website/01-database.Rmd",
     "project_path": "01-database.Rmd",
     "type": "r_markdown",
-    "hash": "3175050207",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1678897053175.0,
@@ -12,8 +12,8 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "28,0",
-        "scrollLine": "15"
+        "cursorPosition": "3,80",
+        "scrollLine": "0"
     },
     "folds": "",
     "lastKnownWriteTime": 1682466619,

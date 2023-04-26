@@ -60,6 +60,9 @@ library(dplyr)
 library(lubridate)
 library(RMySQL)
 library(DBI)
+
+DBI::dbExecute
+
 ```
 
 ## Creating the database connection to my SQLite database {-}
